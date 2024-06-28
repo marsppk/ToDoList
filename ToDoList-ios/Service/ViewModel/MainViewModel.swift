@@ -9,7 +9,7 @@ import Foundation
 
 final class MainViewModel: ObservableObject {
     private var fileCache = FileCache()
-    @Published var showButtonText = "Показать"
+    @Published var showButtonText = "Показать выполненное"
     @Published var sortButtonText = "Сортировать по важности"
     @Published var sortedItems: [TodoItem] = []
     @Published var count = 0
@@ -19,7 +19,7 @@ final class MainViewModel: ObservableObject {
     }
     
     func updateSortedItems() {
-        sortedItems = showButtonText == "Показать" ? Array(fileCache.todoItems.values.filter({ $0.isDone == false })) : Array(fileCache.todoItems.values)
+        sortedItems = showButtonText == "Показать выполненное" ? Array(fileCache.todoItems.values.filter({ $0.isDone == false })) : Array(fileCache.todoItems.values)
         if sortButtonText == "Сортировать по добавлению" {
             sortedItems.sort(by: {$0.importance.getIndex() > $1.importance.getIndex()})
         } else {
