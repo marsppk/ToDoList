@@ -1,5 +1,5 @@
 //
-//  ToDoItem.swift
+//  TodoItem.swift
 //  ToDoList-ios
 //
 //  Created by Maria Slepneva on 15.06.2024.
@@ -16,6 +16,7 @@ struct TodoItem {
         case isDone = "is_done"
         case createdAt = "created_at"
         case changedAt = "changed_at"
+        case color
     }
     
     let id: UUID
@@ -25,6 +26,7 @@ struct TodoItem {
     let isDone: Bool
     let createdAt: Date
     let changedAt: Date?
+    let color: String?
     
     init(
         id: UUID = UUID(),
@@ -33,7 +35,8 @@ struct TodoItem {
         deadline: Date? = nil,
         isDone: Bool = false,
         createdAt: Date = Date(),
-        changedAt: Date? = nil
+        changedAt: Date? = nil,
+        color: String? = nil
     ) {
         self.id = id
         self.text = text
@@ -42,6 +45,7 @@ struct TodoItem {
         self.isDone = isDone
         self.createdAt = createdAt
         self.changedAt = changedAt
+        self.color = color
     }
 }
 
@@ -62,6 +66,7 @@ extension TodoItem {
             .map { interval in Date(timeIntervalSince1970: interval) }
         let changedAt = (dictionary[CodingKeys.changedAt.rawValue] as? TimeInterval)
             .map { interval in Date(timeIntervalSince1970: interval) }
+        let color = dictionary[CodingKeys.color.rawValue] as? String
         return TodoItem(
             id: id,
             text: text,
@@ -69,7 +74,8 @@ extension TodoItem {
             deadline: deadline,
             isDone: isDone,
             createdAt: createdAt,
-            changedAt: changedAt
+            changedAt: changedAt,
+            color: color
         )
     }
     
@@ -88,6 +94,9 @@ extension TodoItem {
         if let changedAt = changedAt {
             dataDict[CodingKeys.changedAt.rawValue] = changedAt.timeIntervalSince1970
         }
+        if let color = color {
+            dataDict[CodingKeys.color.rawValue] = color
+        }
         return dataDict
     }
 }
@@ -95,14 +104,14 @@ extension TodoItem {
 // MARK: - CSV
 
 extension TodoItem {
-    static let csvColumnsDelimiter = ","
+    static let csvColumnsDelimiter = ";"
     static let csvRowsDelimiter = "\r"
     
     static func parse(csv: Any) -> TodoItem? {
         guard let csv = csv as? String else { return nil }
         let columnsData = csv.components(separatedBy: TodoItem.csvColumnsDelimiter)
         guard
-            columnsData.count == 7,
+            columnsData.count == 8,
             let id = UUID(uuidString: columnsData[0]),
             let importance = (columnsData[2].isEmpty ? nil : columnsData[2])
                 .map(Importance.init(rawValue:)) ?? .usual,
@@ -115,6 +124,7 @@ extension TodoItem {
             .map { interval in Date(timeIntervalSince1970: interval) }
         let changedAt = TimeInterval(columnsData[6])
             .map { interval in Date(timeIntervalSince1970: interval) }
+        let color = columnsData[7].isEmpty ? nil : columnsData[7]
         return TodoItem(
             id: id,
             text: text,
@@ -122,7 +132,8 @@ extension TodoItem {
             deadline: deadline,
             isDone: isDone,
             createdAt: createdAt,
-            changedAt: changedAt
+            changedAt: changedAt,
+            color: color
         )
     }
     
@@ -143,6 +154,15 @@ extension TodoItem {
         dataArray.append(isDone.description)
         dataArray.append(createdAt.timeIntervalSince1970.description)
         dataArray.append(changedAt?.timeIntervalSince1970.description ?? "")
+        dataArray.append(color ?? "")
         return dataArray.joined(separator: TodoItem.csvColumnsDelimiter)
     }
 }
+
+// MARK: - Hashable
+
+extension TodoItem: Hashable { }
+
+// MARK: - Identifiable
+
+extension TodoItem: Identifiable { }

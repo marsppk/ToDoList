@@ -18,10 +18,6 @@ class FileCache {
         todoItems[id] = nil
     }
     
-    func removeAllItems() {
-        todoItems.removeAll()
-    }
-    
     func saveJSON(fileName: String) throws {
         let jsonData = todoItems.values.map(\.json)
         let encodedData = try JSONSerialization.data(withJSONObject: jsonData, options: [.prettyPrinted, .sortedKeys])
@@ -39,7 +35,6 @@ class FileCache {
         let jsonData = try getFromJSONFile(fileName: "\(fileName).json")
         let decodedData = try JSONSerialization.jsonObject(with: jsonData, options: [])
         guard let newItems = decodedData as? [[String: Any]] else { return }
-        removeAllItems()
         for todoItem in newItems {
             if let item = TodoItem.parse(json: todoItem) {
                 addNewItem(item: item)
@@ -50,7 +45,6 @@ class FileCache {
     func getItemsFromCSV(fileName: String) throws {
         let csvString = try getFromCSVFile(fileName: "\(fileName).csv")
         let items = csvString.split(separator: TodoItem.csvRowsDelimiter)
-        removeAllItems()
         for i in 1..<items.count {
             if let item = TodoItem.parse(csv: String(items[i])) {
                 addNewItem(item: item)

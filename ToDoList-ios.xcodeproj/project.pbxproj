@@ -11,13 +11,25 @@
 		2D27860D2C1E03A000F34999 /* ToDoList_iosJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D27860C2C1E03A000F34999 /* ToDoList_iosJSONTests.swift */; };
 		2D27861A2C1E3D8C00F34999 /* ToDoList_iosUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2786192C1E3D8C00F34999 /* ToDoList_iosUITests.swift */; };
 		2D27861C2C1E3D8C00F34999 /* ToDoList_iosUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D27861B2C1E3D8C00F34999 /* ToDoList_iosUITestsLaunchTests.swift */; };
+		2D2A9F502C2B7987002B49EF /* TextFieldFrameModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2A9F4F2C2B7987002B49EF /* TextFieldFrameModifier.swift */; };
+		2D2A9F552C2C0EFF002B49EF /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2A9F542C2C0EFF002B49EF /* Date+Extension.swift */; };
+		2D2DD42C2C2B27C9007A0F5A /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DD42B2C2B27C9007A0F5A /* Color+Extension.swift */; };
+		2D2DD42E2C2B2803007A0F5A /* CaseIterable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DD42D2C2B2803007A0F5A /* CaseIterable+Extension.swift */; };
+		2D2DD4302C2B29D7007A0F5A /* ColorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DD42F2C2B29D7007A0F5A /* ColorModifier.swift */; };
+		2D2DD4322C2B68D6007A0F5A /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2DD4312C2B68D6007A0F5A /* UIApplication+Extension.swift */; };
+		2D7939FD2C25808E002542DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7939FC2C25808E002542DE /* MainViewModel.swift */; };
 		2D88B4DB2C1D9B0900049A3B /* ToDoList_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B4DA2C1D9B0900049A3B /* ToDoList_iosApp.swift */; };
-		2D88B4DD2C1D9B0900049A3B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B4DC2C1D9B0900049A3B /* ContentView.swift */; };
+		2D88B4DD2C1D9B0900049A3B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B4DC2C1D9B0900049A3B /* MainView.swift */; };
 		2D88B4DF2C1D9B0B00049A3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D88B4DE2C1D9B0B00049A3B /* Assets.xcassets */; };
 		2D88B4E22C1D9B0B00049A3B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D88B4E12C1D9B0B00049A3B /* Preview Assets.xcassets */; };
 		2D88B4EC2C1D9B0B00049A3B /* ToDoList_iosCSVTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B4EB2C1D9B0B00049A3B /* ToDoList_iosCSVTests.swift */; };
-		2D88B5052C1D9B6D00049A3B /* ToDoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B5042C1D9B6D00049A3B /* ToDoItem.swift */; };
+		2D88B5052C1D9B6D00049A3B /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B5042C1D9B6D00049A3B /* TodoItem.swift */; };
 		2D88B5072C1D9B8700049A3B /* Importance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B5062C1D9B8700049A3B /* Importance.swift */; };
+		2D8E384A2C26D54300C2BC93 /* ModalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8E38492C26D54300C2BC93 /* ModalState.swift */; };
+		2D8E384C2C26D57B00C2BC93 /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8E384B2C26D57B00C2BC93 /* TaskView.swift */; };
+		2D8E384E2C26D5B200C2BC93 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8E384D2C26D5B200C2BC93 /* DetailsView.swift */; };
+		2D8E38502C26D60200C2BC93 /* SheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8E384F2C26D60200C2BC93 /* SheetModifier.swift */; };
+		2DCAE1DE2C2A168E00AF3F6C /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCAE1DD2C2A168E00AF3F6C /* ColorPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,15 +55,27 @@
 		2D2786172C1E3D8C00F34999 /* ToDoList-iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ToDoList-iosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D2786192C1E3D8C00F34999 /* ToDoList_iosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoList_iosUITests.swift; sourceTree = "<group>"; };
 		2D27861B2C1E3D8C00F34999 /* ToDoList_iosUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoList_iosUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2D2A9F4F2C2B7987002B49EF /* TextFieldFrameModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldFrameModifier.swift; sourceTree = "<group>"; };
+		2D2A9F542C2C0EFF002B49EF /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		2D2DD42B2C2B27C9007A0F5A /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
+		2D2DD42D2C2B2803007A0F5A /* CaseIterable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseIterable+Extension.swift"; sourceTree = "<group>"; };
+		2D2DD42F2C2B29D7007A0F5A /* ColorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModifier.swift; sourceTree = "<group>"; };
+		2D2DD4312C2B68D6007A0F5A /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
+		2D7939FC2C25808E002542DE /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		2D88B4D72C1D9B0900049A3B /* ToDoList-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ToDoList-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D88B4DA2C1D9B0900049A3B /* ToDoList_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoList_iosApp.swift; sourceTree = "<group>"; };
-		2D88B4DC2C1D9B0900049A3B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2D88B4DC2C1D9B0900049A3B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		2D88B4DE2C1D9B0B00049A3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2D88B4E12C1D9B0B00049A3B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2D88B4E72C1D9B0B00049A3B /* ToDoList-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ToDoList-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D88B4EB2C1D9B0B00049A3B /* ToDoList_iosCSVTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoList_iosCSVTests.swift; sourceTree = "<group>"; };
-		2D88B5042C1D9B6D00049A3B /* ToDoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItem.swift; sourceTree = "<group>"; };
+		2D88B5042C1D9B6D00049A3B /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		2D88B5062C1D9B8700049A3B /* Importance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Importance.swift; sourceTree = "<group>"; };
+		2D8E38492C26D54300C2BC93 /* ModalState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalState.swift; sourceTree = "<group>"; };
+		2D8E384B2C26D57B00C2BC93 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
+		2D8E384D2C26D5B200C2BC93 /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
+		2D8E384F2C26D60200C2BC93 /* SheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetModifier.swift; sourceTree = "<group>"; };
+		2DCAE1DD2C2A168E00AF3F6C /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +124,7 @@
 		2D2786092C1DDEDC00F34999 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				2D7939FB2C258070002542DE /* ViewModel */,
 				2D27860E2C1E2AFB00F34999 /* FileCache */,
 				2D27860A2C1DDEF100F34999 /* Model */,
 			);
@@ -109,7 +134,7 @@
 		2D27860A2C1DDEF100F34999 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2D88B5042C1D9B6D00049A3B /* ToDoItem.swift */,
+				2D88B5042C1D9B6D00049A3B /* TodoItem.swift */,
 				2D88B5062C1D9B8700049A3B /* Importance.swift */,
 			);
 			path = Model;
@@ -118,7 +143,9 @@
 		2D27860B2C1DDF1B00F34999 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				2D88B4DC2C1D9B0900049A3B /* ContentView.swift */,
+				2D78D1932C2F348900B27987 /* Modifier */,
+				2D78D1922C2F347200B27987 /* Screen */,
+				2D78D1912C2F346100B27987 /* View */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -138,6 +165,54 @@
 				2D27861B2C1E3D8C00F34999 /* ToDoList_iosUITestsLaunchTests.swift */,
 			);
 			path = "ToDoList-iosUITests";
+			sourceTree = "<group>";
+		};
+		2D2DD42A2C2B27A7007A0F5A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2D2DD42B2C2B27C9007A0F5A /* Color+Extension.swift */,
+				2D2DD42D2C2B2803007A0F5A /* CaseIterable+Extension.swift */,
+				2D2DD4312C2B68D6007A0F5A /* UIApplication+Extension.swift */,
+				2D2A9F542C2C0EFF002B49EF /* Date+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		2D78D1912C2F346100B27987 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2D8E384B2C26D57B00C2BC93 /* TaskView.swift */,
+				2DCAE1DD2C2A168E00AF3F6C /* ColorPicker.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2D78D1922C2F347200B27987 /* Screen */ = {
+			isa = PBXGroup;
+			children = (
+				2D88B4DC2C1D9B0900049A3B /* MainView.swift */,
+				2D8E384D2C26D5B200C2BC93 /* DetailsView.swift */,
+			);
+			path = Screen;
+			sourceTree = "<group>";
+		};
+		2D78D1932C2F348900B27987 /* Modifier */ = {
+			isa = PBXGroup;
+			children = (
+				2D8E384F2C26D60200C2BC93 /* SheetModifier.swift */,
+				2D2DD42F2C2B29D7007A0F5A /* ColorModifier.swift */,
+				2D2A9F4F2C2B7987002B49EF /* TextFieldFrameModifier.swift */,
+			);
+			path = Modifier;
+			sourceTree = "<group>";
+		};
+		2D7939FB2C258070002542DE /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2D7939FC2C25808E002542DE /* MainViewModel.swift */,
+				2D8E38492C26D54300C2BC93 /* ModalState.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		2D88B4CE2C1D9B0900049A3B = {
@@ -163,6 +238,7 @@
 		2D88B4D92C1D9B0900049A3B /* ToDoList-ios */ = {
 			isa = PBXGroup;
 			children = (
+				2D2DD42A2C2B27A7007A0F5A /* Extensions */,
 				2D27860B2C1DDF1B00F34999 /* Presentation */,
 				2D2786092C1DDEDC00F34999 /* Service */,
 				2D2786072C1DDE8500F34999 /* Application */,
@@ -326,11 +402,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D88B4DD2C1D9B0900049A3B /* ContentView.swift in Sources */,
+				2D2DD42E2C2B2803007A0F5A /* CaseIterable+Extension.swift in Sources */,
+				2D8E38502C26D60200C2BC93 /* SheetModifier.swift in Sources */,
+				2D88B4DD2C1D9B0900049A3B /* MainView.swift in Sources */,
 				2D88B5072C1D9B8700049A3B /* Importance.swift in Sources */,
+				2D2DD4302C2B29D7007A0F5A /* ColorModifier.swift in Sources */,
+				2D8E384E2C26D5B200C2BC93 /* DetailsView.swift in Sources */,
+				2DCAE1DE2C2A168E00AF3F6C /* ColorPicker.swift in Sources */,
 				2D88B4DB2C1D9B0900049A3B /* ToDoList_iosApp.swift in Sources */,
 				2D2786062C1DC9C000F34999 /* FileCache.swift in Sources */,
-				2D88B5052C1D9B6D00049A3B /* ToDoItem.swift in Sources */,
+				2D2A9F552C2C0EFF002B49EF /* Date+Extension.swift in Sources */,
+				2D2DD42C2C2B27C9007A0F5A /* Color+Extension.swift in Sources */,
+				2D2A9F502C2B7987002B49EF /* TextFieldFrameModifier.swift in Sources */,
+				2D88B5052C1D9B6D00049A3B /* TodoItem.swift in Sources */,
+				2D8E384A2C26D54300C2BC93 /* ModalState.swift in Sources */,
+				2D7939FD2C25808E002542DE /* MainViewModel.swift in Sources */,
+				2D2DD4322C2B68D6007A0F5A /* UIApplication+Extension.swift in Sources */,
+				2D8E384C2C26D57B00C2BC93 /* TaskView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,6 +616,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -557,6 +646,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
