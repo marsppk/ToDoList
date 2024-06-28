@@ -59,7 +59,7 @@ struct TaskView: View {
                 chooseTextStyle()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .modifier(ColorModifier(todoItem: $item))
-                if item.deadline != nil {
+                if item.deadline != nil && !item.isDone {
                     deadlineLabel
                 }
             }
