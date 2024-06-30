@@ -65,7 +65,6 @@ struct TaskView: View {
             }
             chevronButton
                 .foregroundStyle(.gray)
-                .modifier(SheetModifier(modalState: modalState, viewModel: viewModel))
             
         }
         .lineLimit(3)
