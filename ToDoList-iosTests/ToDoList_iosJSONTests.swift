@@ -11,7 +11,7 @@ import XCTest
 final class ToDoList_iosJSONTests: XCTestCase {
 
     func testCorrectnessOfJSONVariable() throws {
-        let todoitem = TodoItem(text: "5", importance: .important, deadline: Date(), isDone: false, changedAt: Date(), color: "#FFFFFF")
+        let todoitem = TodoItem(text: "5", importance: .important, deadline: Date(), isDone: false, changedAt: Date(), color: "#FFFFFF", category: Category(name: "Учеба", color: "#5F82FF"))
         let jsonData = todoitem.json
         guard let jsonData = jsonData as? [String: Any] else { throw NSError(domain: "Вычислимое свойство JSON работает некорректно", code: 0, userInfo: nil) }
         XCTAssertEqual(jsonData["id"] as? String, todoitem.id.uuidString)
@@ -22,38 +22,47 @@ final class ToDoList_iosJSONTests: XCTestCase {
         XCTAssertEqual(jsonData["created_at"] as? TimeInterval, todoitem.createdAt.timeIntervalSince1970)
         XCTAssertEqual(jsonData["changed_at"] as? TimeInterval, todoitem.changedAt?.timeIntervalSince1970)
         XCTAssertEqual(jsonData["color"] as? String, todoitem.color)
+        XCTAssertEqual(jsonData["category_name"] as? String, todoitem.category.name)
+        XCTAssertEqual(jsonData["category_color"] as? String, todoitem.category.color)
     }
 
     func testJSONWithoutDeadline() throws {
-        let todoitem = TodoItem(text: "5", importance: .important, isDone: false, changedAt: Date(), color: "#FFFFFF")
+        let todoitem = TodoItem(text: "5", importance: .important, isDone: false, changedAt: Date(), color: "#FFFFFF", category: Category(name: "Учеба", color: "#5F82FF"))
         let jsonData = todoitem.json
         guard let jsonData = jsonData as? [String: Any] else { throw NSError(domain: "Вычислимое свойство JSON работает некорректно", code: 0, userInfo: nil) }
         XCTAssertNil(jsonData["deadline"])
     }
     
+    func testJSONWithoutCategoryColor() throws {
+        let todoitem = TodoItem(text: "5", importance: .important, deadline: Date(), isDone: false, color: "#FFFFFF", category: Category(name: "Без категории", color: nil))
+        let jsonData = todoitem.json
+        guard let jsonData = jsonData as? [String: Any] else { throw NSError(domain: "Вычислимое свойство JSON работает некорректно", code: 0, userInfo: nil) }
+        XCTAssertNil(jsonData["category_color"])
+    }
+    
     func testJSONWithoutChangedAt() throws {
-        let todoitem = TodoItem(text: "5", importance: .important, deadline: Date(), isDone: false, color: "#FFFFFF")
+        let todoitem = TodoItem(text: "5", importance: .important, deadline: Date(), isDone: false, color: "#FFFFFF", category: Category(name: "Учеба", color: "#5F82FF"))
         let jsonData = todoitem.json
         guard let jsonData = jsonData as? [String: Any] else { throw NSError(domain: "Вычислимое свойство JSON работает некорректно", code: 0, userInfo: nil) }
         XCTAssertNil(jsonData["changed_at"])
     }
     
     func testJSONWithoutColor() throws {
-        let todoitem = TodoItem(text: "5", importance: .important, deadline: Date(), isDone: false, changedAt: Date())
+        let todoitem = TodoItem(text: "5", importance: .important, deadline: Date(), isDone: false, changedAt: Date(), category: Category(name: "Учеба", color: "#5F82FF"))
         let jsonData = todoitem.json
         guard let jsonData = jsonData as? [String: Any] else { throw NSError(domain: "Вычислимое свойство JSON работает некорректно", code: 0, userInfo: nil) }
         XCTAssertNil(jsonData["color"])
     }
     
     func testJSONWithUsualImportance() throws {
-        let todoitem = TodoItem(text: "5", importance: .usual, deadline: Date(), isDone: false, changedAt: Date(), color: "#FFFFFF")
+        let todoitem = TodoItem(text: "5", importance: .usual, deadline: Date(), isDone: false, changedAt: Date(), color: "#FFFFFF", category: Category(name: "Учеба", color: "#5F82FF"))
         let jsonData = todoitem.json
         guard let jsonData = jsonData as? [String: Any] else { throw NSError(domain: "Вычислимое свойство JSON работает некорректно", code: 0, userInfo: nil) }
         XCTAssertNil(jsonData["importance"])
     }
     
     func testCorrectnessOfJSONParsing() throws {
-        let values: [Any] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -68,10 +77,12 @@ final class ToDoList_iosJSONTests: XCTestCase {
         XCTAssertEqual(todoitem.createdAt.timeIntervalSince1970, values[5] as? TimeInterval)
         XCTAssertEqual(todoitem.changedAt?.timeIntervalSince1970, values[6] as? TimeInterval)
         XCTAssertEqual(todoitem.color, values[7] as? String)
+        XCTAssertEqual(todoitem.category.name, values[8] as? String)
+        XCTAssertEqual(todoitem.category.color, values[9] as? String)
     }
     
     func testParcingWithoutImportance() throws {
-        let values: [Any?] = [UUID().uuidString, "5", nil, Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any?] = [UUID().uuidString, "5", nil, Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -82,7 +93,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithoutColor() throws {
-        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, nil]
+        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, nil, "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -92,8 +103,19 @@ final class ToDoList_iosJSONTests: XCTestCase {
         XCTAssertEqual(todoitem.color, nil)
     }
     
+    func testParcingWithoutCategoryColor() throws {
+        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", nil]
+        var dictionary: [String: Any] = [:]
+        for elem in TodoItem.CodingKeys.allCases.enumerated() {
+            dictionary[elem.element.rawValue] = values[elem.offset]
+        }
+        let todoitem = TodoItem.parse(json: dictionary)
+        guard let todoitem = todoitem else { throw NSError(domain: "Парсинг JSON работает некорректно", code: 0, userInfo: nil) }
+        XCTAssertEqual(todoitem.category.color, nil)
+    }
+    
     func testParcingWithoutDeadline() throws {
-        let values: [Any?] = [UUID().uuidString, "5", "important", nil, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any?] = [UUID().uuidString, "5", "important", nil, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -104,7 +126,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithoutChangedAt() throws {
-        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, nil, "#FFFFFF"]
+        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, nil, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -128,7 +150,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithIncorrectDictionary2() throws {
-        let values: [Any] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -139,7 +161,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithEmptyID() throws {
-        let values: [Any] = ["", "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any] = ["", "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -149,7 +171,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithIncorrectIsDoneValue() throws {
-        let values: [Any] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, "false", Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, "false", Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -159,7 +181,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithIncorrectImportanceValue() throws {
-        let values: [Any] = [UUID().uuidString, "5", "cool", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any] = [UUID().uuidString, "5", "cool", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -169,7 +191,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithIncorrectCreatedAtValue() throws {
-        let values: [Any] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, "date", Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, "date", Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -179,7 +201,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithEmptyCreatedAtValue() throws {
-        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, nil, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, nil, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -189,7 +211,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithEmptyIsDoneValue() throws {
-        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, nil, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, nil, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -199,7 +221,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithIncorrectDeadlineValue() throws {
-        let values: [Any?] = [UUID().uuidString, "5", "important", "/", false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF"]
+        let values: [Any?] = [UUID().uuidString, "5", "important", "/", false, Date().timeIntervalSince1970, Date().timeIntervalSince1970, "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
@@ -210,7 +232,7 @@ final class ToDoList_iosJSONTests: XCTestCase {
     }
     
     func testParcingWithIncorrectChangedAtValue() throws {
-        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, ":", "#FFFFFF"]
+        let values: [Any?] = [UUID().uuidString, "5", "important", Date().timeIntervalSince1970, false, Date().timeIntervalSince1970, ":", "#FFFFFF", "Учеба", "#5F82FF"]
         var dictionary: [String: Any] = [:]
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]

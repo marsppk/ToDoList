@@ -9,20 +9,28 @@ import SwiftUI
 
 struct DetailsView: View {
     @ObservedObject var modalState: ModalState
-    @EnvironmentObject var viewModel: MainViewModel
+    @EnvironmentObject var storage: StorageLogic
+    @State var categories: [Category] = []
     @State var text: String = ""
+    @State var title: String = ""
     @State var selection = 2
+    @State var selectionCategory = 0
     @State var showDate = false
     @State var showCalendar = false
     @State var showColor = false
     @State var showPicker = false
+    @State var showCategoryColorPicker = false
     @State var currentColor: Color = .clear
+    @State var currentCategoryColor: Color = .clear
+    @State var customCategoryColor: Color = .orange
     @State var date = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
     @State var isHidden = false
     @State var isDisabledSave = true
     @State var isDisabledDelete = false
+    @State var showCategoryAddition = false
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     var currentColorHex: String {
         currentColor.toHexString()
     }
@@ -75,7 +83,8 @@ struct DetailsView: View {
                 }
             }
             .frame(height: 40)
-            Toggle("", isOn: $showDate).onReceive([showDate].publisher.first(), perform: { value in
+            Toggle("", isOn: $showDate)
+                .onReceive([showDate].publisher.first(), perform: { value in
                 if !value {
                     showCalendar = false
                 }
@@ -128,14 +137,15 @@ struct DetailsView: View {
         .padding(.bottom, 6)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(.secondaryBG)
+                .fill(Color.secondaryBG)
         )
     }
+
     
     var deleteButton: some View {
         Button(action: {
             if let id = modalState.selectedItem?.id {
-                viewModel.deleteItem(id: id)
+                storage.deleteItem(id: id)
             }
             modalState.activateModalView = false
         }, label: {
@@ -162,14 +172,68 @@ struct DetailsView: View {
     var textArea: some View {
         ZStack(alignment: .bottomTrailing) {
             textField
-            RoundedRectangle(cornerRadius: 16)
+            Rectangle()
                 .fill(currentColor)
-                .frame(width: 15, height: 5)
-                .padding()
+                .frame(width: 7)
+                .frame(maxHeight: .infinity)
+
         }
+        .cornerRadius(16)
         .frame(maxHeight: .infinity, alignment: .leading)
         .onTapGesture {
             UIApplication.shared.closeKeyboard()
+        }
+    }
+    
+    var category: some View {
+        HStack {
+            Text("Категория")
+                .frame(maxWidth: .infinity, alignment: .bottomLeading)
+                .foregroundStyle(Color(UIColor.label))
+            HStack {
+                Circle()
+                    .fill(currentCategoryColor)
+                    .frame(width: 15)
+                Picker(selection: $selectionCategory, label: Text("Select a category")) {
+                    ForEach(Array(categories.enumerated()), id: \.offset) { (index, category) in
+                        Text(category.name).tag(index)
+                        if category.name == "Без категории" {
+                            Divider()
+                        }
+                    }
+                    Divider()
+                    Text("Новое").tag(categories.count + 1)
+                }
+                .onChange(of: selectionCategory) {
+                    if selectionCategory < categories.count {
+                        showCategoryAddition = false
+                        if let color = categories[selectionCategory].color {
+                            currentCategoryColor = Color(hex: color)
+                        } else {
+                            currentCategoryColor = .clear
+                        }
+                    } else {
+                        showCategoryAddition = true
+                        currentCategoryColor = .clear
+                    }
+                    isDisabledSave = checkIsDisabledToSave()
+                }
+            }
+        }
+        .frame(height: 40)
+    }
+    
+    var categoryAddition: some View {
+        HStack {
+            TextField("Название категории", text: $title, axis: .vertical)
+                .frame(height: 40)
+                .foregroundStyle(.blue)
+            Circle()
+                .fill(customCategoryColor)
+                .frame(height: 20)
+                .gesture(TapGesture().onEnded({
+                    showCategoryColorPicker.toggle()
+                }))
         }
     }
     
@@ -177,6 +241,16 @@ struct DetailsView: View {
         VStack {
             VStack {
                 importance
+                Divider()
+                category
+                if showCategoryAddition {
+                    Divider()
+                    categoryAddition
+                    if showCategoryColorPicker {
+                        Divider()
+                        ColorPickerView(chosenColor: $customCategoryColor)
+                    }
+                }
                 Divider()
                 picker
                 if showPicker {
@@ -208,10 +282,7 @@ struct DetailsView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Сохранить") {
-                            let deadline = showDate ? date : nil
-                            let color = showColor ? currentColorHex : nil
-                            viewModel.updateItem(item: viewModel.createNewItem(item: modalState.selectedItem, text: text, importance: selection, deadline: deadline, color: color))
-                            modalState.activateModalView = false
+                            saveItem()
                         }.disabled(isDisabledSave)
                     }
                     ToolbarItem(placement: .topBarLeading) {
@@ -222,47 +293,64 @@ struct DetailsView: View {
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .background(Color.primaryBG)
+                .onReceive(modalState.$selectedItem, perform: updateForm)
+                .modifier(KeyboardModifier(isHidden: $isHidden))
+                .onChange(of: text) {
+                    isDisabledSave = checkIsDisabledToSave()
+                }
+                .onChange(of: showColor) {
+                    updateCurrentColor(showColor)
+                }
+                .onChange(of: showDate) {
+                    updateDate(showDate)
+                }
         }
-        .onReceive(modalState.$selectedItem) { selectedItem in
-            if selectedItem == nil {
-                isDisabledDelete = true
-            }
-            text = selectedItem?.text ?? ""
-            selection = Int(selectedItem?.importance.getIndex() ?? 2)
-            if let color = selectedItem?.color {
+    }
+
+    private func updateForm(_ selectedItem: TodoItem?) {
+        categories = storage.getCategories()
+        if let selectedItem {
+            text = selectedItem.text
+            selection = Int(selectedItem.importance.getIndex())
+            if let color = selectedItem.color {
                 currentColor = Color(hex: color)
                 showColor = true
             }
-            if let deadline = selectedItem?.deadline {
+            if let deadline = selectedItem.deadline {
                 date = deadline
                 showDate = true
             }
-        }
-        .onChange(of: text) {
-            isDisabledSave = checkIsDisabledToSave()
-        }
-        .onChange(of: showColor) {
-            currentColor = showColor ? (currentColor == .clear) ? Color(UIColor.red) : currentColor : .clear
-            isDisabledSave = checkIsDisabledToSave()
-        }
-        .onChange(of: showDate) {
-            date = !showDate ? Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date() : date
-            isDisabledSave = checkIsDisabledToSave()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
-            withAnimation {
-                isHidden = true
+            if let index = categories.firstIndex(of: selectedItem.category) {
+                selectionCategory = index
+                if let categoryColor = selectedItem.category.color {
+                    currentCategoryColor = Color(hex: categoryColor)
+                }
             }
+        } else {
+            isDisabledDelete = true
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
-            withAnimation {
-                isHidden = false
-            }
-        }
+    }
+
+    private func updateCurrentColor(_ showColor: Bool) {
+        currentColor = showColor ? (currentColor == .clear) ? Color(UIColor.red) : currentColor : .clear
+        isDisabledSave = checkIsDisabledToSave()
+    }
+
+    private func updateDate(_ showDate: Bool) {
+        date = !showDate ? Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date() : date
+        isDisabledSave = checkIsDisabledToSave()
+    }
+
+    private func saveItem() {
+        let deadline = showDate ? date : nil
+        let color = showColor ? currentColorHex : nil
+        let category: Category = selectionCategory > categories.count ? Category(name: title, color: customCategoryColor.toHexString()) : categories[selectionCategory]
+        storage.updateItem(item: storage.createNewItem(item: modalState.selectedItem, text: text, importance: selection, deadline: deadline, color: color, category: category))
+        modalState.activateModalView = false
     }
     
     @ViewBuilder
-    func chooseRightView() -> some View {
+    private func chooseRightView() -> some View {
         if verticalSizeClass == .compact || horizontalSizeClass == .regular {
             HStack(spacing: 16) {
                 ScrollView {
@@ -284,14 +372,16 @@ struct DetailsView: View {
         }
     }
     
-    func checkIsDisabledToSave() -> Bool {
+    private func checkIsDisabledToSave() -> Bool {
         guard !text.isEmpty,
               currentColorHex != modalState.selectedItem?.color && showColor ||
               !showColor && modalState.selectedItem?.color != nil ||
               !date.isEqualDay(with: modalState.selectedItem?.deadline) && showDate ||
               !showDate && modalState.selectedItem?.deadline != nil ||
               selection != modalState.selectedItem?.importance.getIndex() ||
-              text != modalState.selectedItem?.text
+              text != modalState.selectedItem?.text ||
+              selectionCategory > categories.count && title != "" ||
+              selectionCategory < categories.count && categories[selectionCategory].name != modalState.selectedItem?.category.name
         else { return true }
         return false
     }
@@ -299,6 +389,6 @@ struct DetailsView: View {
 
 #Preview {
     DetailsView(modalState: ModalState())
-        .environmentObject(MainViewModel())
+        .environmentObject(MainViewModel().storage)
 }
 
