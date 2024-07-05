@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject var viewModel = MainViewModel()
-    @StateObject var modalState = ModalState()
+    @StateObject private var viewModel = MainViewModel()
+    @StateObject private var modalState = ModalState()
     
     var menu: some View {
         Menu {
@@ -64,11 +64,11 @@ struct MainView: View {
         Section {
             ForEach($viewModel.sortedItems) { item in
                 TaskView(item: item)
-                    .environmentObject(viewModel)
+                    .environmentObject(viewModel.storage)
                     .environmentObject(modalState)
                     .swipeActions(edge: .leading) {
                         Button {
-                            viewModel.updateItem(item: viewModel.createItemWithAnotherIsDone(item: item.wrappedValue))
+                            viewModel.updateItem(item: viewModel.storage.createItemWithAnotherIsDone(item: item.wrappedValue))
                         } label: {
                             Image(systemName: "checkmark.circle.fill")
                         }
@@ -87,6 +87,7 @@ struct MainView: View {
                         }
                         .tint(.buttonGray)
                     }
+                    .frame(minHeight: 56)
             }
             footer
                 .gesture(
@@ -94,9 +95,13 @@ struct MainView: View {
                         modalState.changeValues(item: nil)
                     }
                 )
+                .frame(minHeight: 56)
         } header: {
             sectionHeader
+                .frame(minHeight: 45)
+                .padding(.trailing, 16)
         }
+        .listRowInsets(.init(top: 0, leading: 16, bottom: 0, trailing: 0))
     }
     
     var plusButton: some View {
@@ -109,10 +114,17 @@ struct MainView: View {
                     .resizable()
                     .frame(width: 44, height: 44)
                     .shadow(color: Color.shadow, radius: 20, x: 0, y: 8)
-                    .modifier(SheetModifier(modalState: modalState, viewModel: viewModel))
-
             }
         )
+    }
+    
+    var calendarView: some View {
+        CalendarView(storage: $viewModel.storage, modalState: modalState)
+            .navigationTitle("Мои дела")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarRole(.editor)
+            .scrollContentBackground(.hidden)
+            .background(Color.primaryBG)
     }
     
     var content: some View {
@@ -121,8 +133,25 @@ struct MainView: View {
                 section
             }
             .navigationTitle("Мои дела")
-            .scrollContentBackground(.hidden)
-            .background(Color.primaryBG)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        Button(action: {
+                            modalState.activateModalView = false
+                            modalState.activateCalendarView = true
+                        }, label: {
+                            Image(systemName: "calendar")
+                        })
+                    } else {
+                        NavigationLink {
+                            calendarView
+                        } label: {
+                            Image(systemName: "calendar")
+                        }
+                    }
+                }
+            }
+            
         }.safeAreaInset(edge: VerticalEdge.bottom) {
             plusButton
         }
@@ -132,11 +161,12 @@ struct MainView: View {
         chooseView()
         .onAppear {
             do {
-                try viewModel.loadItemsFromJSON()
+                try viewModel.loadItems()
             } catch {
                 print("Ошибка при загрузке данных из JSON: \(error)")
             }
         }
+        .modifier(SheetModifier(modalState: modalState, storage: viewModel.storage))
     }
     
     @ViewBuilder
@@ -147,9 +177,13 @@ struct MainView: View {
             } detail: {
                 if modalState.activateModalView {
                     DetailsView(modalState: modalState)
-                        .environmentObject(viewModel)
+                        .environmentObject(viewModel.storage)
+                }
+                if modalState.activateCalendarView {
+                    calendarView
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
         } else {
             NavigationStack {
                 content

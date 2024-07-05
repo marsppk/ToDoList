@@ -17,7 +17,7 @@ struct ColorModifier: ViewModifier {
         }
         else {
             content
-                .foregroundStyle(todoItem.color != nil ? Color(hex: todoItem.color!) : .primary)
+                .foregroundStyle(.primary)
                 .strikethrough(false)
         }
     }

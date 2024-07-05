@@ -14,8 +14,11 @@ class FileCache {
         todoItems[item.id] = item
     }
     
-    func removeItem(by id: UUID) {
-        todoItems[id] = nil
+    func removeItem(by id: UUID) -> TodoItem? {
+        defer {
+            todoItems[id] = nil
+        }
+        return todoItems[id]
     }
     
     func saveJSON(fileName: String) throws {

@@ -6,20 +6,32 @@
 //
 
 import Foundation
+import Combine
 
 final class MainViewModel: ObservableObject {
-    private var fileCache = FileCache()
+    @Published var storage = StorageLogic()
     @Published var showButtonText = "Показать выполненное"
     @Published var sortButtonText = "Сортировать по важности"
     @Published var sortedItems: [TodoItem] = []
     @Published var count = 0
+    var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        storage.$isUpdated
+            .sink { _ in
+                self.prepare()
+            }
+            .store(in: &cancellables)
+    }
     
     func updateCount() {
-        count = fileCache.todoItems.filter({ $0.1.isDone == true }).count
+        let items = storage.getItems()
+        count = items.filter({ $0.1.isDone == true }).count
     }
     
     func updateSortedItems() {
-        sortedItems = showButtonText == "Показать выполненное" ? Array(fileCache.todoItems.values.filter({ $0.isDone == false })) : Array(fileCache.todoItems.values)
+        let items = storage.getItems()
+        sortedItems = showButtonText == "Показать выполненное" ? Array(items.values.filter({ $0.isDone == false })) : Array(items.values)
         if sortButtonText == "Сортировать по добавлению" {
             sortedItems.sort(by: {$0.importance.getIndex() > $1.importance.getIndex()})
         } else {
@@ -34,42 +46,17 @@ final class MainViewModel: ObservableObject {
     func changeSortButtonValue() {
         sortButtonText = sortButtonText == "Сортировать по важности" ? "Сортировать по добавлению" : "Сортировать по важности"
     }
-    
-    func createItemWithAnotherIsDone(item: TodoItem) -> TodoItem {
-        TodoItem(id: item.id, text: item.text, importance: item.importance, deadline: item.deadline, isDone: !item.isDone, createdAt: item.createdAt, changedAt: item.changedAt, color: item.color)
-    }
-    
-    func createNewItem(item: TodoItem?, text: String, importance: Int, deadline: Date?, color: String?) -> TodoItem {
-        if let item = item {
-            return TodoItem(id: item.id, text: text, importance: Importance.allCases[importance], deadline: deadline, isDone: false, createdAt: item.createdAt, changedAt: Date(), color: color)
-        } else {
-            return TodoItem(text: text, importance: Importance.allCases[importance], deadline: deadline, isDone: false, createdAt: Date(), changedAt: nil, color: color)
-        }
-    }
-    
+
     func updateItem(item: TodoItem) {
-        fileCache.addNewItem(item: item)
-        saveItemsToJSON()
-        prepare()
+        storage.updateItem(item: item)
     }
     
     func deleteItem(id: UUID) {
-        fileCache.removeItem(by: id)
-        saveItemsToJSON()
-        prepare()
+        storage.deleteItem(id: id)
     }
     
-    func loadItemsFromJSON() throws {
-        try fileCache.getItemsFromJSON(fileName: "test1")
-        prepare()
-    }
-    
-    func saveItemsToJSON() {
-        do {
-            try fileCache.saveJSON(fileName: "test1")
-        } catch {
-            print("Ошибка при сохранении данных в JSON: \(error)")
-        }
+    func loadItems() throws {
+        try storage.loadItemsFromJSON()
     }
     
     func prepare() {

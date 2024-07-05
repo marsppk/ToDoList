@@ -17,6 +17,8 @@ struct TodoItem {
         case createdAt = "created_at"
         case changedAt = "changed_at"
         case color
+        case categoryName = "category_name"
+        case categoryColor = "category_color"
     }
     
     let id: UUID
@@ -27,6 +29,7 @@ struct TodoItem {
     let createdAt: Date
     let changedAt: Date?
     let color: String?
+    let category: Category
     
     init(
         id: UUID = UUID(),
@@ -36,7 +39,8 @@ struct TodoItem {
         isDone: Bool = false,
         createdAt: Date = Date(),
         changedAt: Date? = nil,
-        color: String? = nil
+        color: String? = nil,
+        category: Category = Category(name: "Без категории", color: nil)
     ) {
         self.id = id
         self.text = text
@@ -46,6 +50,7 @@ struct TodoItem {
         self.createdAt = createdAt
         self.changedAt = changedAt
         self.color = color
+        self.category = category
     }
 }
 
@@ -60,13 +65,15 @@ extension TodoItem {
             let importance = (dictionary[CodingKeys.importance.rawValue] as? String).map(Importance.init(rawValue:)) ?? .usual,
             let isDone = dictionary[CodingKeys.isDone.rawValue] as? Bool,
             let createdAt = (dictionary[CodingKeys.createdAt.rawValue] as? TimeInterval)
-                .map(Date.init(timeIntervalSince1970:))
+                .map(Date.init(timeIntervalSince1970:)),
+            let categoryName = dictionary[CodingKeys.categoryName.rawValue] as? String
         else { return nil }
         let deadline = (dictionary[CodingKeys.deadline.rawValue] as? TimeInterval)
             .map { interval in Date(timeIntervalSince1970: interval) }
         let changedAt = (dictionary[CodingKeys.changedAt.rawValue] as? TimeInterval)
             .map { interval in Date(timeIntervalSince1970: interval) }
         let color = dictionary[CodingKeys.color.rawValue] as? String
+        let categoryColor = dictionary[CodingKeys.categoryColor.rawValue] as? String
         return TodoItem(
             id: id,
             text: text,
@@ -75,7 +82,11 @@ extension TodoItem {
             isDone: isDone,
             createdAt: createdAt,
             changedAt: changedAt,
-            color: color
+            color: color,
+            category: Category(
+                name: categoryName,
+                color: categoryColor
+            )
         )
     }
     
@@ -97,6 +108,10 @@ extension TodoItem {
         if let color = color {
             dataDict[CodingKeys.color.rawValue] = color
         }
+        dataDict[CodingKeys.categoryName.rawValue] = category.name
+        if let categoryColor = category.color {
+            dataDict[CodingKeys.categoryColor.rawValue] = categoryColor
+        }
         return dataDict
     }
 }
@@ -111,7 +126,7 @@ extension TodoItem {
         guard let csv = csv as? String else { return nil }
         let columnsData = csv.components(separatedBy: TodoItem.csvColumnsDelimiter)
         guard
-            columnsData.count == 8,
+            columnsData.count == 10,
             let id = UUID(uuidString: columnsData[0]),
             let importance = (columnsData[2].isEmpty ? nil : columnsData[2])
                 .map(Importance.init(rawValue:)) ?? .usual,
@@ -125,6 +140,8 @@ extension TodoItem {
         let changedAt = TimeInterval(columnsData[6])
             .map { interval in Date(timeIntervalSince1970: interval) }
         let color = columnsData[7].isEmpty ? nil : columnsData[7]
+        let categoryName = columnsData[8]
+        let categoryColor = columnsData[9].isEmpty ? nil : columnsData[9]
         return TodoItem(
             id: id,
             text: text,
@@ -133,7 +150,11 @@ extension TodoItem {
             isDone: isDone,
             createdAt: createdAt,
             changedAt: changedAt,
-            color: color
+            color: color,
+            category: Category(
+                name: categoryName,
+                color: categoryColor
+            )
         )
     }
     
@@ -155,6 +176,8 @@ extension TodoItem {
         dataArray.append(createdAt.timeIntervalSince1970.description)
         dataArray.append(changedAt?.timeIntervalSince1970.description ?? "")
         dataArray.append(color ?? "")
+        dataArray.append(category.name)
+        dataArray.append(category.color ?? "")
         return dataArray.joined(separator: TodoItem.csvColumnsDelimiter)
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TaskView: View {
     @Binding var item: TodoItem
-    @EnvironmentObject var viewModel: MainViewModel
+    @EnvironmentObject var storage: StorageLogic
     @EnvironmentObject var modalState: ModalState
     
     var circleBackground: some View {
@@ -26,13 +26,17 @@ struct TaskView: View {
             .background(circleBackground)
             .gesture(
                 TapGesture().onEnded {
-                    viewModel.updateItem(item: viewModel.createItemWithAnotherIsDone(item: item))
+                    storage.updateItem(item: storage.createItemWithAnotherIsDone(item: item))
                 }
             )
     }
     
     var textWithExclamationMark: some View {
         Text(Image(systemName: "exclamationmark.2")).foregroundStyle(.red) + Text(item.text)
+    }
+    
+    var textWithArrowDown: some View {
+        Text(Image(systemName: "arrow.down")).foregroundStyle(.gray) + Text(item.text)
     }
     
     var chevronButton: some View {
@@ -53,23 +57,27 @@ struct TaskView: View {
     }
     
     var body: some View {
-        HStack {
-            circleImage
-            VStack {
-                chooseTextStyle()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .modifier(ColorModifier(todoItem: $item))
-                if item.deadline != nil {
-                    deadlineLabel
+        ZStack(alignment: .trailing) {
+            HStack {
+                circleImage
+                VStack {
+                    chooseTextStyle()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .modifier(ColorModifier(todoItem: $item))
+                    if item.deadline != nil && !item.isDone {
+                        deadlineLabel
+                    }
                 }
+                chevronButton
+                    .foregroundStyle(.gray)
+                    .padding(.trailing, 16)
             }
-            chevronButton
-                .foregroundStyle(.gray)
-                .modifier(SheetModifier(modalState: modalState, viewModel: viewModel))
-            
+            .lineLimit(3)
+            .padding([.bottom, .top], 8)
+            Rectangle()
+                .fill(item.color != nil ? Color(hex: item.color!) : .clear)
+                .frame(width: 5)
         }
-        .lineLimit(3)
-        .padding([.bottom, .top], 8)
     }
     
     @ViewBuilder
@@ -77,6 +85,8 @@ struct TaskView: View {
         switch (item.importance, item.isDone) {
         case (.important, false):
             textWithExclamationMark
+        case (.unimportant, false):
+            textWithArrowDown
         default:
             Text(item.text)
         }
