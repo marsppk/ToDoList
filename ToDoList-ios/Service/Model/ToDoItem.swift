@@ -20,7 +20,6 @@ struct TodoItem {
         case categoryName = "category_name"
         case categoryColor = "category_color"
     }
-    
     let id: UUID
     let text: String
     let importance: Importance
@@ -30,7 +29,6 @@ struct TodoItem {
     let changedAt: Date?
     let color: String?
     let category: Category
-    
     init(
         id: UUID = UUID(),
         text: String,
@@ -59,10 +57,11 @@ struct TodoItem {
 extension TodoItem {
     static func parse(json: Any) -> TodoItem? {
         guard
-            let dictionary = json as? [String:Any],
+            let dictionary = json as? [String: Any],
             let id = (dictionary[CodingKeys.id.rawValue] as? String).map(UUID.init(uuidString:)) ?? nil,
             let text = dictionary[CodingKeys.text.rawValue] as? String,
-            let importance = (dictionary[CodingKeys.importance.rawValue] as? String).map(Importance.init(rawValue:)) ?? .usual,
+            let importance = (dictionary[CodingKeys.importance.rawValue] as? String)
+                .map(Importance.init(rawValue:)) ?? .usual,
             let isDone = dictionary[CodingKeys.isDone.rawValue] as? Bool,
             let createdAt = (dictionary[CodingKeys.createdAt.rawValue] as? TimeInterval)
                 .map(Date.init(timeIntervalSince1970:)),
@@ -89,7 +88,6 @@ extension TodoItem {
             )
         )
     }
-    
     var json: Any {
         var dataDict: [String: Any] = [:]
         dataDict[CodingKeys.id.rawValue] = id.uuidString
@@ -121,7 +119,6 @@ extension TodoItem {
 extension TodoItem {
     static let csvColumnsDelimiter = ";"
     static let csvRowsDelimiter = "\r"
-    
     static func parse(csv: Any) -> TodoItem? {
         guard let csv = csv as? String else { return nil }
         let columnsData = csv.components(separatedBy: TodoItem.csvColumnsDelimiter)
@@ -157,7 +154,6 @@ extension TodoItem {
             )
         )
     }
-    
     static var csvTitles: Any {
         var titles: [String] = []
         for cases in CodingKeys.allCases {
@@ -165,7 +161,6 @@ extension TodoItem {
         }
         return titles.joined(separator: TodoItem.csvColumnsDelimiter)
     }
-    
     var csv: Any {
         var dataArray: [String] = []
         dataArray.append(id.uuidString)
