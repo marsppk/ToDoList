@@ -14,6 +14,7 @@ struct CalendarView: UIViewRepresentable {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: CalendarTableViewCell.identifier)
         tableView.backgroundColor = .primaryBG
+        tableView.showsVerticalScrollIndicator = false
         return tableView
     }()
     let collectionView: UICollectionView = {

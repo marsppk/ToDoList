@@ -12,7 +12,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
     var stack: UIStackView = {
         var stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 16
+        stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -50,8 +50,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
             stack.addArrangedSubview($0)
         }
         NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-            stack.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -16),
+            stack.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             stack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
             stack.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8)
         ])

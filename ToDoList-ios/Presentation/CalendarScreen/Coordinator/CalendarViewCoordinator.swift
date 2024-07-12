@@ -14,8 +14,8 @@ class CalendarViewCoordinator: NSObject {
     var storage: StorageLogic
     var sections: [Date]
     var selectedItem = IndexPath(row: 0, section: 0)
+    var isSelectedInCollectionView = false
     var view: CalendarView
-    var isSelectedFromCollectionView = false
     var modalState: ModalState
     var cancellables = Set<AnyCancellable>()
     init(storage: StorageLogic, modalState: ModalState, uiview: CalendarView) {
@@ -151,6 +151,7 @@ extension CalendarViewCoordinator: UICollectionViewDataSource {
         }
         if indexPath == selectedItem {
             cell.isSelected = true
+            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
         if indexPath.row == sections.count {
             cell.setupUI(day: "Другое", month: "", isAnother: true)
@@ -172,30 +173,27 @@ extension CalendarViewCoordinator: UICollectionViewDelegateFlowLayout {
         return CGSize(width: 80, height: 80)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        view.collectionView.deselectItem(at: selectedItem, animated: false)
-        [selectedItem, indexPath].forEach {
-            if let cell = collectionView.cellForItem(at: $0) as? CalendarCollectionViewCell {
-                cell.configureCell()
-            }
-        }
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        guard selectedItem != indexPath else { return }
         selectedItem = indexPath
         let indexPath = IndexPath(row: 0, section: indexPath.row)
-        isSelectedFromCollectionView = true
-        view.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-        isSelectedFromCollectionView = false
+        isSelectedInCollectionView = true
+        view.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        view.collectionView.reloadData()
     }
 }
 
 extension CalendarViewCoordinator: UIScrollViewDelegate {
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        isSelectedInCollectionView = false
+    }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let tableView = scrollView as? UITableView, !isSelectedFromCollectionView else { return }
-        if let topIndexPath = tableView.indexPathsForVisibleRows?.first {
-            let indexPath = IndexPath(row: topIndexPath.section, section: 0)
-            view.collectionView.deselectItem(at: selectedItem, animated: false)
-            view.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-            selectedItem = indexPath
-            view.collectionView.reloadData()
+        let tableView = view.tableView
+        if scrollView == tableView && !isSelectedInCollectionView {
+            if let topIndexPath = tableView.indexPathsForVisibleRows?.first {
+                let indexPath = IndexPath(row: topIndexPath.section, section: 0)
+                selectedItem = indexPath
+                view.collectionView.reloadData()
+            }
         }
     }
 }
