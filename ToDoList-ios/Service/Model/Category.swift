@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct Category: Hashable, Codable {    
+struct Category: Hashable, Codable {
     let name: String
     let color: String?
 }
-
