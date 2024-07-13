@@ -176,7 +176,9 @@ extension CalendarViewCoordinator: UICollectionViewDelegateFlowLayout {
         guard selectedItem != indexPath else { return }
         selectedItem = indexPath
         let indexPath = IndexPath(row: 0, section: indexPath.row)
-        isSelectedInCollectionView = true
+        if isSelectedInCollectionView == false {
+            isSelectedInCollectionView = true
+        }
         view.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         view.collectionView.reloadData()
     }
