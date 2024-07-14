@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -58,6 +58,7 @@
 		2D90572E2C428E2200CC2442 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D90572D2C428E2200CC2442 /* Constants.swift */; };
 		2DB7F56B2C31CC23009C65FE /* StorageLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB7F56A2C31CC23009C65FE /* StorageLogic.swift */; };
 		2DD5B7862C43EC26008D1705 /* CustomColorPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 2DD5B7852C43EC26008D1705 /* CustomColorPicker */; };
+		2DD926032C43EE2B00504C40 /* CustomColorPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 2DD926022C43EE2B00504C40 /* CustomColorPicker */; };
 		30597BB9BF4B0090C93FC4E3 /* Pods_ToDoList_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABDBD073CD320AA2AEDF77E0 /* Pods_ToDoList_ios.framework */; };
 		B2D6D75ABAFB3BD62A2A6F22 /* Pods_ToDoList_ios_ToDoList_iosUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C40FAE15DAFE4AEA2338B70 /* Pods_ToDoList_ios_ToDoList_iosUITests.framework */; };
 		FAF278C904E72A5AB9ABE7F2 /* Pods_ToDoList_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75DBBBD7DFB3B06BEB24F380 /* Pods_ToDoList_iosTests.framework */; };
@@ -160,6 +161,7 @@
 				30597BB9BF4B0090C93FC4E3 /* Pods_ToDoList_ios.framework in Frameworks */,
 				2D736BE52C3C33A2009E361E /* CocoaLumberjackSwiftLogBackend in Frameworks */,
 				2D736BE32C3C33A2009E361E /* CocoaLumberjackSwift in Frameworks */,
+				2DD926032C43EE2B00504C40 /* CustomColorPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +579,7 @@
 				2D736BE22C3C33A2009E361E /* CocoaLumberjackSwift */,
 				2D736BE42C3C33A2009E361E /* CocoaLumberjackSwiftLogBackend */,
 				2DD5B7852C43EC26008D1705 /* CustomColorPicker */,
+				2DD926022C43EE2B00504C40 /* CustomColorPicker */,
 			);
 			productName = "ToDoList-ios";
 			productReference = 2D88B4D72C1D9B0900049A3B /* ToDoList-ios.app */;
@@ -635,7 +638,7 @@
 			mainGroup = 2D88B4CE2C1D9B0900049A3B;
 			packageReferences = (
 				2D736BDF2C3C33A2009E361E /* XCRemoteSwiftPackageReference "CocoaLumberjack" */,
-				2D1ED7DF2C3C71DB002C7ED0 /* XCLocalSwiftPackageReference "../CustomColorPicker" */,
+				2DD926012C43EE2B00504C40 /* XCRemoteSwiftPackageReference "CustomColorPicker" */,
 			);
 			productRefGroup = 2D88B4D82C1D9B0900049A3B /* Products */;
 			projectDirPath = "";
@@ -1148,13 +1151,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		2D1ED7DF2C3C71DB002C7ED0 /* XCLocalSwiftPackageReference "../CustomColorPicker" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../CustomColorPicker;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		2D736BDF2C3C33A2009E361E /* XCRemoteSwiftPackageReference "CocoaLumberjack" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1162,6 +1158,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.8.5;
+			};
+		};
+		2DD926012C43EE2B00504C40 /* XCRemoteSwiftPackageReference "CustomColorPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marsppk/CustomColorPicker";
+			requirement = {
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1184,6 +1188,11 @@
 		};
 		2DD5B7852C43EC26008D1705 /* CustomColorPicker */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = CustomColorPicker;
+		};
+		2DD926022C43EE2B00504C40 /* CustomColorPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2DD926012C43EE2B00504C40 /* XCRemoteSwiftPackageReference "CustomColorPicker" */;
 			productName = CustomColorPicker;
 		};
 /* End XCSwiftPackageProductDependency section */
