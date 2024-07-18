@@ -12,7 +12,7 @@ import CocoaLumberjackSwift
 struct DetailsView: View {
     @ObservedObject var modalState: ModalState
     @EnvironmentObject var storage: StorageLogic
-    @StateObject var viewModel = DetailsViewModel()
+    @StateObject var viewModel: DetailsViewModel
     @State var currentCategoryColor: Color = .clear
     @State var customCategoryColor: Color = .orange
     @State var currentColor: Color = .clear
@@ -27,7 +27,7 @@ struct DetailsView: View {
     var deleteButton: some View {
         Button(action: {
             if let id = modalState.selectedItem?.id {
-                storage.deleteItem(id: id)
+                viewModel.deleteToDoItem(id: id, storage: storage)
             }
             modalState.activateModalView = false
         }, label: {
@@ -222,7 +222,10 @@ struct DetailsView: View {
     }
 }
 
+@MainActor
+let mainViewModel = MainViewModel(deviceID: UIDevice.current.identifierForVendor?.uuidString ?? "")
+
 #Preview {
-    DetailsView(modalState: ModalState())
-        .environmentObject(MainViewModel().storage)
+    DetailsView(modalState: ModalState(), viewModel: DetailsViewModel(apiManager: mainViewModel.apiManager))
+        .environmentObject(mainViewModel.storage)
 }

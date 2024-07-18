@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct Constants {
+    static let key: String = "token"
+    static let httpStatusCodeSuccess = 200..<300
+}

@@ -59,6 +59,13 @@
 		2DB7F56B2C31CC23009C65FE /* StorageLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB7F56A2C31CC23009C65FE /* StorageLogic.swift */; };
 		2DD5B7862C43EC26008D1705 /* CustomColorPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 2DD5B7852C43EC26008D1705 /* CustomColorPicker */; };
 		2DD926032C43EE2B00504C40 /* CustomColorPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 2DD926022C43EE2B00504C40 /* CustomColorPicker */; };
+		2DD926082C47AFAC00504C40 /* NetworkingElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD926072C47AFAC00504C40 /* NetworkingElement.swift */; };
+		2DD9260A2C47B15500504C40 /* NetworkingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD926092C47B15500504C40 /* NetworkingItem.swift */; };
+		2DD9260C2C47B29100504C40 /* NetworkingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD9260B2C47B29100504C40 /* NetworkingList.swift */; };
+		2DE2D8E92C4919EB003C673C /* AlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE2D8E82C4919EB003C673C /* AlertModifier.swift */; };
+		2DE2D8EB2C4926DB003C673C /* NetworkingErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE2D8EA2C4926DB003C673C /* NetworkingErrors.swift */; };
+		2DE2D8ED2C4927C1003C673C /* AlertData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE2D8EC2C4927C1003C673C /* AlertData.swift */; };
+		2DE2D8EF2C494EFB003C673C /* Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE2D8EE2C494EFB003C673C /* Delay.swift */; };
 		30597BB9BF4B0090C93FC4E3 /* Pods_ToDoList_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABDBD073CD320AA2AEDF77E0 /* Pods_ToDoList_ios.framework */; };
 		B2D6D75ABAFB3BD62A2A6F22 /* Pods_ToDoList_ios_ToDoList_iosUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C40FAE15DAFE4AEA2338B70 /* Pods_ToDoList_ios_ToDoList_iosUITests.framework */; };
 		FAF278C904E72A5AB9ABE7F2 /* Pods_ToDoList_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75DBBBD7DFB3B06BEB24F380 /* Pods_ToDoList_iosTests.framework */; };
@@ -133,6 +140,14 @@
 		2D90572B2C427B5300CC2442 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		2D90572D2C428E2200CC2442 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2DB7F56A2C31CC23009C65FE /* StorageLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageLogic.swift; sourceTree = "<group>"; };
+		2DD926072C47AFAC00504C40 /* NetworkingElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingElement.swift; sourceTree = "<group>"; };
+		2DD926092C47B15500504C40 /* NetworkingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingItem.swift; sourceTree = "<group>"; };
+		2DD9260B2C47B29100504C40 /* NetworkingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingList.swift; sourceTree = "<group>"; };
+		2DD9260D2C47DA5600504C40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2DE2D8E82C4919EB003C673C /* AlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModifier.swift; sourceTree = "<group>"; };
+		2DE2D8EA2C4926DB003C673C /* NetworkingErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingErrors.swift; sourceTree = "<group>"; };
+		2DE2D8EC2C4927C1003C673C /* AlertData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertData.swift; sourceTree = "<group>"; };
+		2DE2D8EE2C494EFB003C673C /* Delay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delay.swift; sourceTree = "<group>"; };
 		2F644B482C9BC226F56A2558 /* Pods-ToDoList-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ios.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList-ios/Pods-ToDoList-ios.debug.xcconfig"; sourceTree = "<group>"; };
 		6A8BAC05BB1BC0DB42C5FF48 /* Pods-ToDoList-ios-ToDoList-iosUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ios-ToDoList-iosUITests.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList-ios-ToDoList-iosUITests/Pods-ToDoList-ios-ToDoList-iosUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		6C40FAE15DAFE4AEA2338B70 /* Pods_ToDoList_ios_ToDoList_iosUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList_ios_ToDoList_iosUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -275,6 +290,7 @@
 		2D2786072C1DDE8500F34999 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				2DD9260D2C47DA5600504C40 /* Info.plist */,
 				2D2786082C1DDEA300F34999 /* Resources */,
 				2D88B4DA2C1D9B0900049A3B /* ToDoListApp.swift */,
 			);
@@ -311,6 +327,7 @@
 				2D88B5042C1D9B6D00049A3B /* TodoItem.swift */,
 				2D88B5062C1D9B8700049A3B /* Importance.swift */,
 				2D3028052C3480130087F940 /* Category.swift */,
+				2DE2D8EC2C4927C1003C673C /* AlertData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -434,6 +451,7 @@
 				2D2DD42F2C2B29D7007A0F5A /* ColorModifier.swift */,
 				2D2A9F4F2C2B7987002B49EF /* TextFieldFrameModifier.swift */,
 				2D54CA982C382ED6004D4719 /* KeyboardModifier.swift */,
+				2DE2D8E82C4919EB003C673C /* AlertModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -500,6 +518,7 @@
 		2D9057252C42786A00CC2442 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				2DD926062C47AF1900504C40 /* Model */,
 				2D9057262C42789100CC2442 /* NetworkingService.swift */,
 				2D9057282C4278AD00CC2442 /* DefaultNetworkingService.swift */,
 			);
@@ -512,6 +531,18 @@
 				2D90572B2C427B5300CC2442 /* KeychainService.swift */,
 			);
 			path = Persistence;
+			sourceTree = "<group>";
+		};
+		2DD926062C47AF1900504C40 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2DD926072C47AFAC00504C40 /* NetworkingElement.swift */,
+				2DD926092C47B15500504C40 /* NetworkingItem.swift */,
+				2DD9260B2C47B29100504C40 /* NetworkingList.swift */,
+				2DE2D8EA2C4926DB003C673C /* NetworkingErrors.swift */,
+				2DE2D8EE2C494EFB003C673C /* Delay.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		53E3A230BC46D03000158B15 /* Frameworks */ = {
@@ -778,6 +809,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DD9260C2C47B29100504C40 /* NetworkingList.swift in Sources */,
 				2DB7F56B2C31CC23009C65FE /* StorageLogic.swift in Sources */,
 				2D9057292C4278AD00CC2442 /* DefaultNetworkingService.swift in Sources */,
 				2D8E38502C26D60200C2BC93 /* SheetModifier.swift in Sources */,
@@ -797,17 +829,21 @@
 				2D88B4DB2C1D9B0900049A3B /* ToDoListApp.swift in Sources */,
 				2D2786062C1DC9C000F34999 /* FileCache.swift in Sources */,
 				2D2A9F552C2C0EFF002B49EF /* Date+Extension.swift in Sources */,
+				2DE2D8EB2C4926DB003C673C /* NetworkingErrors.swift in Sources */,
 				2D1ED7F02C3D496B002C7ED0 /* ColorPickerView.swift in Sources */,
 				2D2DD42C2C2B27C9007A0F5A /* Color+Extension.swift in Sources */,
+				2DE2D8EF2C494EFB003C673C /* Delay.swift in Sources */,
 				2D90572C2C427B5300CC2442 /* KeychainService.swift in Sources */,
 				2D2A9F502C2B7987002B49EF /* TextFieldFrameModifier.swift in Sources */,
 				2D0D5FC92C40542B0041043F /* MockTodoItems.swift in Sources */,
 				2D88B5052C1D9B6D00049A3B /* TodoItem.swift in Sources */,
 				2D8E384A2C26D54300C2BC93 /* ModalState.swift in Sources */,
+				2DE2D8ED2C4927C1003C673C /* AlertData.swift in Sources */,
 				2D30280A2C356AF00087F940 /* CalendarCollectionViewCell.swift in Sources */,
 				2D7939FD2C25808E002542DE /* MainViewModel.swift in Sources */,
 				2D30280F2C356B970087F940 /* CalendarViewCoordinator.swift in Sources */,
 				2D1ED7EE2C3D4873002C7ED0 /* DeadlineView.swift in Sources */,
+				2DD9260A2C47B15500504C40 /* NetworkingItem.swift in Sources */,
 				2D2DD4322C2B68D6007A0F5A /* UIApplication+Extension.swift in Sources */,
 				2D67129F2C41753200E2C99D /* UINavigationController+Extension.swift in Sources */,
 				2D8E384C2C26D57B00C2BC93 /* TaskView.swift in Sources */,
@@ -816,6 +852,8 @@
 				2D3028082C3536C90087F940 /* CalendarView.swift in Sources */,
 				2D6712982C414BA700E2C99D /* LogFormatter.swift in Sources */,
 				2D3028132C36CFB90087F940 /* UIView+Extension.swift in Sources */,
+				2DD926082C47AFAC00504C40 /* NetworkingElement.swift in Sources */,
+				2DE2D8E92C4919EB003C673C /* AlertModifier.swift in Sources */,
 				2D3028062C3480140087F940 /* Category.swift in Sources */,
 				2D1ED7E72C3D351C002C7ED0 /* DetailsViewModel.swift in Sources */,
 			);
@@ -1015,6 +1053,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "ToDoList-ios/Application/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1048,6 +1087,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "ToDoList-ios/Application/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

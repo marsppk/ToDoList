@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CalendarView: UIViewRepresentable {
     @Binding var storage: StorageLogic
+    @Binding var apiManager: DefaultNetworkingService
     @ObservedObject var modalState: ModalState
     let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -39,7 +40,7 @@ struct CalendarView: UIViewRepresentable {
         return plusButton
     }()
     func makeCoordinator() -> CalendarViewCoordinator {
-        CalendarViewCoordinator(storage: storage, modalState: modalState, uiview: self)
+        CalendarViewCoordinator(storage: storage, modalState: modalState, uiview: self, apiManager: apiManager)
     }
     func makeUIView(context: Context) -> UIView {
         let view = UIView(frame: .zero)

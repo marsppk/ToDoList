@@ -15,6 +15,7 @@
 			dependencies = (
 			);
 			name = SwiftLint;
+			productName = SwiftLint;
 		};
 /* End PBXAggregateTarget section */
 
@@ -57,8 +58,8 @@
 /* Begin PBXFileReference section */
 		08BD5C787AC10EB7748610F1DCBDB0B1 /* Pods-ToDoList-ios-ToDoList-iosUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ToDoList-ios-ToDoList-iosUITests.release.xcconfig"; sourceTree = "<group>"; };
 		0F6C3C5DB022A3F725A276AFDDB02EDC /* Pods-ToDoList-ios-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ToDoList-ios-acknowledgements.plist"; sourceTree = "<group>"; };
-		175A535085196630AC679B7DED1E96DD /* Pods-ToDoList-ios */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-ToDoList-ios"; path = Pods_ToDoList_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		216A602772B5B4B6134EC93703939943 /* Pods-ToDoList-ios-ToDoList-iosUITests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-ToDoList-ios-ToDoList-iosUITests"; path = Pods_ToDoList_ios_ToDoList_iosUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		175A535085196630AC679B7DED1E96DD /* Pods_ToDoList_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		216A602772B5B4B6134EC93703939943 /* Pods_ToDoList_ios_ToDoList_iosUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList_ios_ToDoList_iosUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29F9BFB03D6E6608934A8D1F8122D9CA /* Pods-ToDoList-iosTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ToDoList-iosTests-acknowledgements.plist"; sourceTree = "<group>"; };
 		2DF9B6CBDC6271FFEB8074F708607559 /* Pods-ToDoList-ios-ToDoList-iosUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ToDoList-ios-ToDoList-iosUITests-acknowledgements.plist"; sourceTree = "<group>"; };
 		34A90FEE0740481CF91335263690E22C /* Pods-ToDoList-ios-ToDoList-iosUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ToDoList-ios-ToDoList-iosUITests-dummy.m"; sourceTree = "<group>"; };
@@ -72,9 +73,9 @@
 		94097CAA31E1C87A3922FDC3B46ABE74 /* Pods-ToDoList-ios-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ToDoList-ios-dummy.m"; sourceTree = "<group>"; };
 		9554E011E5AC4ADDE4D1F084EA170C1C /* Pods-ToDoList-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ToDoList-ios.release.xcconfig"; sourceTree = "<group>"; };
 		96C1EC99978AA215C557D9B1D2EBAD77 /* Pods-ToDoList-ios.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ToDoList-ios.modulemap"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A0D801094DEB215876A861DCCD440F1F /* Pods-ToDoList-iosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ToDoList-iosTests.release.xcconfig"; sourceTree = "<group>"; };
-		A2285BE08C212F707B5B7E99C8863827 /* Pods-ToDoList-iosTests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-ToDoList-iosTests"; path = Pods_ToDoList_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2285BE08C212F707B5B7E99C8863827 /* Pods_ToDoList_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB7725FEF00A21D32A2E617FBB6A330F /* Pods-ToDoList-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ToDoList-ios.debug.xcconfig"; sourceTree = "<group>"; };
 		AFC32F3AB047537C92468917AA8A048C /* Pods-ToDoList-iosTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ToDoList-iosTests.modulemap"; sourceTree = "<group>"; };
 		BF2CDD84116E8D046739E290A43A3DE4 /* Pods-ToDoList-iosTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ToDoList-iosTests-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -177,9 +178,9 @@
 		A9A8C070CAA8743FC47BEB1629506A03 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				175A535085196630AC679B7DED1E96DD /* Pods-ToDoList-ios */,
-				216A602772B5B4B6134EC93703939943 /* Pods-ToDoList-ios-ToDoList-iosUITests */,
-				A2285BE08C212F707B5B7E99C8863827 /* Pods-ToDoList-iosTests */,
+				175A535085196630AC679B7DED1E96DD /* Pods_ToDoList_ios.framework */,
+				216A602772B5B4B6134EC93703939943 /* Pods_ToDoList_ios_ToDoList_iosUITests.framework */,
+				A2285BE08C212F707B5B7E99C8863827 /* Pods_ToDoList_iosTests.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -218,7 +219,6 @@
 			children = (
 				7FDA596DBE0337ACDFE55A210D54EF26 /* Support Files */,
 			);
-			name = SwiftLint;
 			path = SwiftLint;
 			sourceTree = "<group>";
 		};
@@ -284,7 +284,7 @@
 			);
 			name = "Pods-ToDoList-ios-ToDoList-iosUITests";
 			productName = Pods_ToDoList_ios_ToDoList_iosUITests;
-			productReference = 216A602772B5B4B6134EC93703939943 /* Pods-ToDoList-ios-ToDoList-iosUITests */;
+			productReference = 216A602772B5B4B6134EC93703939943 /* Pods_ToDoList_ios_ToDoList_iosUITests.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		C9C3FD38FFA5202C09D2B5E06DFE4AC2 /* Pods-ToDoList-ios */ = {
@@ -303,7 +303,7 @@
 			);
 			name = "Pods-ToDoList-ios";
 			productName = Pods_ToDoList_ios;
-			productReference = 175A535085196630AC679B7DED1E96DD /* Pods-ToDoList-ios */;
+			productReference = 175A535085196630AC679B7DED1E96DD /* Pods_ToDoList_ios.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		C9F5B270202586EDE04EDD2C3561F484 /* Pods-ToDoList-iosTests */ = {
@@ -322,7 +322,7 @@
 			);
 			name = "Pods-ToDoList-iosTests";
 			productName = Pods_ToDoList_iosTests;
-			productReference = A2285BE08C212F707B5B7E99C8863827 /* Pods-ToDoList-iosTests */;
+			productReference = A2285BE08C212F707B5B7E99C8863827 /* Pods_ToDoList_iosTests.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -534,7 +534,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -769,7 +769,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -65,9 +65,9 @@ class MockTodoItems {
             color: "#5F82FF"
         )
     )
-    static let itemWithUsualImportance = TodoItem(
+    static let itemWithBasicImportance = TodoItem(
         text: "5",
-        importance: .usual,
+        importance: .basic,
         deadline: Date(),
         isDone: false,
         changedAt: Date(),

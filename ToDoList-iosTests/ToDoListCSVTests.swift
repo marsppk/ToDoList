@@ -62,8 +62,8 @@ final class ToDoListCSVTests: XCTestCase {
         XCTAssert(arrayOfData.count == 10)
         XCTAssert(arrayOfData[6].isEmpty)
     }
-    func testCSVWithUsualImportance() throws {
-        let todoitem = MockTodoItems.itemWithUsualImportance
+    func testCSVWithBasicImportance() throws {
+        let todoitem = MockTodoItems.itemWithBasicImportance
         let csvString = todoitem.csv
         guard let csvString = csvString as? String else { throw CSVErrors.csvComputedPropertyIncorrect }
         let arrayOfData = csvString.components(separatedBy: TodoItem.csvColumnsDelimiter)
@@ -90,7 +90,7 @@ final class ToDoListCSVTests: XCTestCase {
         let csvString = values.joined(separator: TodoItem.csvColumnsDelimiter)
         let todoitem = TodoItem.parse(csv: csvString)
         guard let todoitem = todoitem else { throw CSVErrors.csvParsingIncorrect }
-        XCTAssertEqual(todoitem.importance, .usual)
+        XCTAssertEqual(todoitem.importance, .basic)
     }
     @MainActor func testParcingWithoutDeadline() throws {
         let values = DataForParsing.itemWithoutDeadline

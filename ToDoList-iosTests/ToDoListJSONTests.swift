@@ -53,8 +53,8 @@ final class ToDoListJSONTests: XCTestCase {
         guard let jsonData = jsonData as? [String: Any] else { throw JSONErrors.jsonComputedPropertyIncorrect }
         XCTAssertNil(jsonData["color"])
     }
-    func testJSONWithUsualImportance() throws {
-        let todoitem = MockTodoItems.itemWithUsualImportance
+    func testJSONWithBasicImportance() throws {
+        let todoitem = MockTodoItems.itemWithBasicImportance
         let jsonData = todoitem.json
         guard let jsonData = jsonData as? [String: Any] else { throw JSONErrors.jsonComputedPropertyIncorrect }
         XCTAssertNil(jsonData["importance"])
@@ -87,7 +87,7 @@ final class ToDoListJSONTests: XCTestCase {
         dictionary[TodoItem.CodingKeys.importance.rawValue] = nil
         let todoitem = TodoItem.parse(json: dictionary)
         guard let todoitem = todoitem else { throw JSONErrors.jsonParsingIncorrect }
-        XCTAssertEqual(todoitem.importance, .usual)
+        XCTAssertEqual(todoitem.importance, .basic)
     }
     @MainActor func testParcingWithoutColor() throws {
         let values: [Any?] = DataForParsing.itemWithAllPropertiesForJSON

@@ -9,7 +9,9 @@ import SwiftUI
 import CocoaLumberjackSwift
 
 struct MainView: View {
-    @StateObject private var viewModel = MainViewModel()
+    @StateObject private var viewModel = MainViewModel(
+        deviceID: UIDevice.current.identifierForVendor?.uuidString ?? ""
+    )
     @StateObject private var modalState = ModalState()
     init() {
         setupLogger()
@@ -19,7 +21,7 @@ struct MainView: View {
             Button(
                 action: {
                     viewModel.changeShowButtonValue()
-                    viewModel.updateSortedItems()
+                    viewModel.updateSortedItems(items: Array(viewModel.storage.getItems().values))
                 },
                 label: {
                     Text(viewModel.showButtonText)
@@ -28,7 +30,7 @@ struct MainView: View {
             Button(
                 action: {
                     viewModel.changeSortButtonValue()
-                    viewModel.updateSortedItems()
+                    viewModel.updateSortedItems(items: Array(viewModel.storage.getItems().values))
                 },
                 label: {
                     Text(viewModel.sortButtonText)
@@ -64,7 +66,7 @@ struct MainView: View {
         Section {
             ForEach($viewModel.sortedItems) { item in
                 TaskView(item: item)
-                    .environmentObject(viewModel.storage)
+                    .environmentObject(viewModel)
                     .environmentObject(modalState)
                     .swipeActions(edge: .leading) {
                         Button {
@@ -121,7 +123,7 @@ struct MainView: View {
         )
     }
     var calendarView: some View {
-        CalendarView(storage: $viewModel.storage, modalState: modalState)
+        CalendarView(storage: $viewModel.storage, apiManager: $viewModel.apiManager, modalState: modalState)
             .navigationTitle("Мои дела")
             .navigationBarTitleDisplayMode(.inline)
             .scrollContentBackground(.hidden)
@@ -153,6 +155,11 @@ struct MainView: View {
                         }
                     }
                 }
+                ToolbarItem(placement: .topBarLeading) {
+                    if viewModel.isActive {
+                        ProgressView()
+                    }
+                }
             }
         }.safeAreaInset(edge: VerticalEdge.bottom) {
             plusButton
@@ -162,14 +169,10 @@ struct MainView: View {
         chooseView()
         .onAppear {
             DDLogInfo("\(#function): MainView appeared")
-            do {
-                try viewModel.loadItems()
-                DDLogInfo("\(#function): the items have been loaded successfully")
-            } catch {
-                DDLogError("\(#function): \(error.localizedDescription)")
-            }
+            viewModel.loadItems()
         }
-        .modifier(SheetModifier(modalState: modalState, storage: viewModel.storage))
+        .modifier(SheetModifier(modalState: modalState, storage: viewModel.storage, apiManager: viewModel.apiManager))
+        .modifier(AlertModifier(apiManager: viewModel.apiManager))
     }
     @ViewBuilder
     func chooseView() -> some View {
@@ -178,7 +181,7 @@ struct MainView: View {
                 content
             } detail: {
                 if modalState.activateModalView {
-                    DetailsView(modalState: modalState)
+                    DetailsView(modalState: modalState, viewModel: DetailsViewModel(apiManager: viewModel.apiManager))
                         .environmentObject(viewModel.storage)
                 }
                 if modalState.activateCalendarView {

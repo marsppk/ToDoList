@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TaskView: View {
     @Binding var item: TodoItem
-    @EnvironmentObject var storage: StorageLogic
+    @EnvironmentObject var viewModel: MainViewModel
     @EnvironmentObject var modalState: ModalState
     var circleBackground: some View {
         RoundedRectangle(cornerRadius: 16)
@@ -24,7 +24,7 @@ struct TaskView: View {
             .background(circleBackground)
             .gesture(
                 TapGesture().onEnded {
-                    storage.updateItem(item: storage.createItemWithAnotherIsDone(item: item))
+                    viewModel.updateItem(item: viewModel.storage.createItemWithAnotherIsDone(item: item))
                 }
             )
     }
@@ -77,7 +77,7 @@ struct TaskView: View {
         switch (item.importance, item.isDone) {
         case (.important, false):
             textWithExclamationMark
-        case (.unimportant, false):
+        case (.low, false):
             textWithArrowDown
         default:
             Text(item.text)

@@ -12,23 +12,30 @@ import CocoaLumberjackSwift
 @MainActor
 class CalendarViewCoordinator: NSObject {
     var storage: StorageLogic
+    var apiManager: DefaultNetworkingService
     var sections: [Date]
     var selectedItem = IndexPath(row: 0, section: 0)
     var isSelectedInCollectionView = false
     var view: CalendarView
     var modalState: ModalState
     var cancellables = Set<AnyCancellable>()
-    init(storage: StorageLogic, modalState: ModalState, uiview: CalendarView) {
+    init(storage: StorageLogic, modalState: ModalState, uiview: CalendarView, apiManager: DefaultNetworkingService) {
+        self.apiManager = apiManager
         self.storage = storage
         self.sections = storage.getSections()
         self.view = uiview
         self.modalState = modalState
         super.init()
         storage.$isUpdated
-            .sink { [weak self] _ in
+            .sink { [weak self] value in
                 guard let self = self else { return }
-                self.sections = self.storage.getSections()
-                self.reloadData()
+                if value {
+                    DispatchQueue.main.async {
+                        self.sections = self.storage.getSections()
+                        self.reloadData()
+                        storage.isUpdated = false
+                    }
+                }
             }
             .store(in: &cancellables)
     }
@@ -52,6 +59,38 @@ class CalendarViewCoordinator: NSObject {
             anotherCategory = 1
         }
         return storage.getItems().count == 0 ? 0 : sections.count + anotherCategory
+    }
+    func updateToDoItem(item: TodoItem) {
+        storage.updateItem(item: item)
+        storage.saveItemsToJSON()
+        apiManager.incrementNumberOfTasks()
+        updateToDoItemOnServer(item: item)
+    }
+    private func updateToDoItemOnServer(item: TodoItem, retryDelay: Int = Delay.minDelay) {
+        Task {
+            do {
+                try await apiManager.updateTodoItem(item: item)
+                storage.isUpdated = true
+                apiManager.decrementNumberOfTasks()
+                DDLogInfo("\(#function): the item have been updated successfully")
+            } catch {
+                DDLogError("\(#function): \(error.localizedDescription)")
+                let error = error as? NetworkingErrors
+                let isServerError = error?.localizedDescription == NetworkingErrors.serverError.localizedDescription
+                if retryDelay < Delay.maxDelay, isServerError {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(retryDelay)) {
+                        self.updateToDoItemOnServer(
+                            item: item,
+                            retryDelay: Delay.countNextDelay(from: retryDelay)
+                        )
+                    }
+                } else {
+                    storage.updateIsDirty(value: true)
+                    apiManager.decrementNumberOfTasks()
+                    storage.isUpdated = true
+                }
+            }
+        }
     }
 }
 
@@ -127,7 +166,8 @@ extension CalendarViewCoordinator: UITableViewDelegate {
             let item = self.storage.getItemsForSection(section: indexPath.section)[indexPath.row]
             let check = isLeading ? !item.isDone : item.isDone
             if check {
-                self.storage.updateItem(item: self.storage.createItemWithAnotherIsDone(item: item))
+                let newItem = self.storage.createItemWithAnotherIsDone(item: item)
+                self.updateToDoItem(item: newItem)
                 tableView.reloadRows(at: [indexPath], with: .none)
             }
             completionHandler(true)
