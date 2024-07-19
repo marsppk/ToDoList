@@ -61,7 +61,7 @@ extension TodoItem {
             let id = (dictionary[CodingKeys.id.rawValue] as? String).map(UUID.init(uuidString:)) ?? nil,
             let text = dictionary[CodingKeys.text.rawValue] as? String,
             let importance = (dictionary[CodingKeys.importance.rawValue] as? String)
-                .map(Importance.init(rawValue:)) ?? .usual,
+                .map(Importance.init(rawValue:)) ?? .basic,
             let isDone = dictionary[CodingKeys.isDone.rawValue] as? Bool,
             let createdAt = (dictionary[CodingKeys.createdAt.rawValue] as? TimeInterval)
                 .map(Date.init(timeIntervalSince1970:)),
@@ -92,7 +92,7 @@ extension TodoItem {
         var dataDict: [String: Any] = [:]
         dataDict[CodingKeys.id.rawValue] = id.uuidString
         dataDict[CodingKeys.text.rawValue] = text
-        if importance != .usual {
+        if importance != .basic {
             dataDict[CodingKeys.importance.rawValue] = importance.rawValue
         }
         if let deadline = deadline {
@@ -126,7 +126,7 @@ extension TodoItem {
             columnsData.count == 10,
             let id = UUID(uuidString: columnsData[0]),
             let importance = (columnsData[2].isEmpty ? nil : columnsData[2])
-                .map(Importance.init(rawValue:)) ?? .usual,
+                .map(Importance.init(rawValue:)) ?? .basic,
             let isDone = Bool(columnsData[4]),
             let createdAtInterval = TimeInterval(columnsData[5])
         else { return nil }
@@ -165,7 +165,7 @@ extension TodoItem {
         var dataArray: [String] = []
         dataArray.append(id.uuidString)
         dataArray.append(text)
-        dataArray.append(importance != .usual ? importance.rawValue : "")
+        dataArray.append(importance != .basic ? importance.rawValue : "")
         dataArray.append(deadline?.timeIntervalSince1970.description ?? "")
         dataArray.append(isDone.description)
         dataArray.append(createdAt.timeIntervalSince1970.description)

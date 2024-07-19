@@ -9,6 +9,17 @@ import Foundation
 
 class FileCache {
     private(set) var todoItems: [UUID: TodoItem] = [:]
+    private(set) var isDirty: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: "isDirty")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "isDirty")
+        }
+    }
+    func updateIsDirtyValue(by newValue: Bool) {
+        isDirty = newValue
+    }
     func addNewItem(item: TodoItem) {
         todoItems[item.id] = item
     }
@@ -17,6 +28,9 @@ class FileCache {
             todoItems[id] = nil
         }
         return todoItems[id]
+    }
+    func removeAllItems() {
+        todoItems.removeAll()
     }
     func saveJSON(fileName: String) throws {
         let jsonData = todoItems.values.map(\.json)

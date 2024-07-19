@@ -111,24 +111,44 @@ final class StorageLogic: ObservableObject {
     }
     func updateItem(item: TodoItem) {
         fileCache.addNewItem(item: item)
-        saveItemsToJSON()
-        isUpdated = true
     }
-    func deleteItem(id: UUID) {
-        fileCache.removeItem(by: id)
-        saveItemsToJSON()
-        isUpdated = true
+    func updateItemAfterLoading(item: TodoItem) {
+        guard let oldItem = fileCache.todoItems[item.id] else { return updateItem(item: item) }
+        updateItem(
+            item: TodoItem(
+                id: item.id,
+                text: item.text,
+                importance: item.importance,
+                deadline: item.deadline,
+                isDone: item.isDone,
+                createdAt: item.createdAt,
+                changedAt: item.changedAt,
+                color: item.color,
+                category: oldItem.category
+            )
+        )
+    }
+    @discardableResult
+    func deleteItem(id: UUID) -> TodoItem? {
+        return fileCache.removeItem(by: id)
+    }
+    func deleteAllItemsThatNotInBackend(items: [TodoItem]) {
+        let ids = items.compactMap({ $0.id })
+        for item in fileCache.todoItems.values where !ids.contains(item.id) {
+            deleteItem(id: item.id)
+        }
     }
     func loadItemsFromJSON() throws {
         try fileCache.getItemsFromJSON(fileName: "test1")
-        isUpdated = true
     }
     func saveItemsToJSON() {
-        do {
-            try fileCache.saveJSON(fileName: "test1")
-            DDLogInfo("\(#function): Items successfully saved")
-        } catch {
-            DDLogError("\(#function): \(error.localizedDescription)")
+        Task {
+            do {
+                try fileCache.saveJSON(fileName: "test1")
+                DDLogInfo("\(#function): Items successfully saved")
+            } catch {
+                DDLogError("\(#function): \(error.localizedDescription)")
+            }
         }
     }
     func getItems() -> [UUID: TodoItem] {
@@ -148,5 +168,11 @@ final class StorageLogic: ObservableObject {
         return fileCache.todoItems.values.filter({
             ($0.deadline != nil) && $0.deadline!.makeEqualDates() == sections[section]
         })
+    }
+    func checkIsDirty() -> Bool {
+        return fileCache.isDirty
+    }
+    func updateIsDirty(value: Bool) {
+        fileCache.updateIsDirtyValue(by: value)
     }
 }

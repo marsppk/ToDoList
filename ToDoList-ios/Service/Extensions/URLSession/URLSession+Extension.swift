@@ -17,38 +17,35 @@ actor URLSessionDataTaskManager {
     }
 
     func set(_ dataTask: URLSessionDataTask) {
-        task = dataTask
-    }
-
-    func isTaskCancelled() -> Bool {
-        isCancelled
+        if isCancelled {
+            dataTask.cancel()
+        } else {
+            task = dataTask
+            dataTask.resume()
+        }
     }
 }
 
 extension URLSession {
+    enum Errors: Error {
+        case badRequest
+    }
     func dataTask(for request: URLRequest) async throws -> (Data, URLResponse) {
         let taskManager = URLSessionDataTaskManager()
         return try await withTaskCancellationHandler(
             operation: {
                 try await withCheckedThrowingContinuation { continuation in
+                    let dataTask = self.dataTask(with: request) { data, response, error in
+                        if let error = error {
+                            continuation.resume(throwing: error)
+                        } else if let data = data, let response = response {
+                            continuation.resume(returning: (data, response))
+                        } else {
+                            continuation.resume(throwing: Errors.badRequest)
+                        }
+                    }
                     Task {
-                        let dataTask = self.dataTask(with: request) { data, response, error in
-                            if let error = error {
-                                continuation.resume(throwing: error)
-                            } else if let data = data, let response = response {
-                                continuation.resume(returning: (data, response))
-                            } else {
-                                continuation.resume(throwing: URLError(.unknown))
-                            }
-                        }
                         await taskManager.set(dataTask)
-                        let isCancelled = await taskManager.isTaskCancelled()
-                        switch isCancelled {
-                        case false:
-                            dataTask.resume()
-                        case true:
-                            continuation.resume(throwing: CancellationError())
-                        }
                     }
                 }
             },
