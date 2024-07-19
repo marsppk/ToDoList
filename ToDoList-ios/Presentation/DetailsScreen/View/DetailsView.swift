@@ -153,6 +153,9 @@ struct DetailsView: View {
                 .onAppear {
                     DDLogInfo("\(#function): DetailsView appeared")
                 }
+                .onDisappear {
+                    DDLogInfo("\(#function): DetailsView disappeared")
+                }
         }
     }
     @ViewBuilder

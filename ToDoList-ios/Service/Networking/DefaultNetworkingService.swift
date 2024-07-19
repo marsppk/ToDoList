@@ -128,7 +128,6 @@ class DefaultNetworkingService: NetworkingService, ObservableObject, @unchecked 
         request.httpMethod = "PATCH"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("\(revision)", forHTTPHeaderField: "X-Last-Known-Revision")
-        request.setValue("50", forHTTPHeaderField: "X-Generate-Fails") // generate fails
         request.httpBody = data
         return request
     }

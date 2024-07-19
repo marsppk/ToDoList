@@ -131,6 +131,9 @@ struct MainView: View {
             .onAppear {
                 DDLogInfo("\(#function): CalendarView appeared")
             }
+            .onDisappear {
+                DDLogInfo("\(#function): CalendarView disappeared")
+            }
     }
     var content: some View {
         VStack {
@@ -170,6 +173,9 @@ struct MainView: View {
         .onAppear {
             DDLogInfo("\(#function): MainView appeared")
             viewModel.loadItems()
+        }
+        .onDisappear {
+            DDLogInfo("\(#function): MainView disappeared")
         }
         .modifier(SheetModifier(modalState: modalState, storage: viewModel.storage, apiManager: viewModel.apiManager))
         .modifier(AlertModifier(apiManager: viewModel.apiManager))
