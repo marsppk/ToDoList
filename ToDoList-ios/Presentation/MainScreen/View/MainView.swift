@@ -82,7 +82,7 @@ struct MainView: View {
                     }
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
-                            viewModel.deleteItem(id: item.wrappedValue.id)
+                            viewModel.deleteItem(item: item.wrappedValue)
                         } label: {
                             Image(systemName: "trash.fill")
                         }

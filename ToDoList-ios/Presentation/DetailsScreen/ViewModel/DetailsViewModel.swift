@@ -86,8 +86,7 @@ final class DetailsViewModel: ObservableObject {
         isDisabledSave = false
     }
     func addToDoItem(item: TodoItem, storage: StorageLogic) {
-        storage.updateItem(item: item)
-        storage.saveItemsToJSON()
+        storage.insertItemInSwiftData(item: item)
         apiManager.incrementNumberOfTasks()
         addToDoItemOnServer(item: item, storage: storage)
     }
@@ -95,7 +94,6 @@ final class DetailsViewModel: ObservableObject {
         Task {
             do {
                 try await apiManager.addTodoItem(item: item)
-                storage.isUpdated = true
                 apiManager.decrementNumberOfTasks()
                 DDLogInfo("\(#function): the item have been added successfully")
             } catch {
@@ -113,14 +111,12 @@ final class DetailsViewModel: ObservableObject {
                 } else {
                     storage.updateIsDirty(value: true)
                     apiManager.decrementNumberOfTasks()
-                    storage.isUpdated = true
                 }
             }
         }
     }
     func updateToDoItem(item: TodoItem, storage: StorageLogic) {
-        storage.updateItem(item: item)
-        storage.saveItemsToJSON()
+        storage.updateItemInSwiftData(item: item)
         apiManager.incrementNumberOfTasks()
         updateToDoItemOnServer(item: item, storage: storage)
     }
@@ -128,7 +124,6 @@ final class DetailsViewModel: ObservableObject {
         Task {
             do {
                 try await apiManager.updateTodoItem(item: item)
-                storage.isUpdated = true
                 apiManager.decrementNumberOfTasks()
                 DDLogInfo("\(#function): the item have been updated successfully")
             } catch {
@@ -146,22 +141,19 @@ final class DetailsViewModel: ObservableObject {
                 } else {
                     storage.updateIsDirty(value: true)
                     apiManager.decrementNumberOfTasks()
-                    storage.isUpdated = true
                 }
             }
         }
     }
-    func deleteToDoItem(id: UUID, storage: StorageLogic) {
-        storage.deleteItem(id: id)
-        storage.saveItemsToJSON()
+    func deleteToDoItem(item: TodoItem, storage: StorageLogic) {
+        storage.deleteItemInSwiftData(item: item)
         apiManager.incrementNumberOfTasks()
-        deleteToDoItemOnServer(id: id, storage: storage)
+        deleteToDoItemOnServer(id: item.id, storage: storage)
     }
     func deleteToDoItemOnServer(id: UUID, storage: StorageLogic, retryDelay: Int = Delay.minDelay) {
         Task {
             do {
                 try await apiManager.deleteTodoItem(id: id.uuidString)
-                storage.isUpdated = true
                 apiManager.decrementNumberOfTasks()
                 DDLogInfo("\(#function): the item have been deleted successfully")
             } catch {
@@ -179,7 +171,6 @@ final class DetailsViewModel: ObservableObject {
                 } else {
                     storage.updateIsDirty(value: true)
                     apiManager.decrementNumberOfTasks()
-                    storage.isUpdated = true
                 }
             }
         }

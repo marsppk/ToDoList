@@ -41,6 +41,8 @@
 		2D736BE32C3C33A2009E361E /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2D736BE22C3C33A2009E361E /* CocoaLumberjackSwift */; };
 		2D736BE52C3C33A2009E361E /* CocoaLumberjackSwiftLogBackend in Frameworks */ = {isa = PBXBuildFile; productRef = 2D736BE42C3C33A2009E361E /* CocoaLumberjackSwiftLogBackend */; };
 		2D7939FD2C25808E002542DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7939FC2C25808E002542DE /* MainViewModel.swift */; };
+		2D7DAB6C2C4EE6D80031A232 /* FileCache + SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7DAB6B2C4EE6D80031A232 /* FileCache + SwiftData.swift */; };
+		2D7DAB6F2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7DAB6E2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift */; };
 		2D88B4DB2C1D9B0900049A3B /* ToDoListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B4DA2C1D9B0900049A3B /* ToDoListApp.swift */; };
 		2D88B4DD2C1D9B0900049A3B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B4DC2C1D9B0900049A3B /* MainView.swift */; };
 		2D88B4DF2C1D9B0B00049A3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D88B4DE2C1D9B0B00049A3B /* Assets.xcassets */; };
@@ -122,6 +124,8 @@
 		2D736BD92C3B0F9E009E361E /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
 		2D736BDB2C3B0FE8009E361E /* ToDoListDataTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListDataTaskTests.swift; sourceTree = "<group>"; };
 		2D7939FC2C25808E002542DE /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		2D7DAB6B2C4EE6D80031A232 /* FileCache + SwiftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileCache + SwiftData.swift"; sourceTree = "<group>"; };
+		2D7DAB6E2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageLogic + SwiftData.swift"; sourceTree = "<group>"; };
 		2D88B4D72C1D9B0900049A3B /* ToDoList-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ToDoList-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D88B4DA2C1D9B0900049A3B /* ToDoListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListApp.swift; sourceTree = "<group>"; };
 		2D88B4DC2C1D9B0900049A3B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -315,7 +319,6 @@
 				2D0D5FC72C4054200041043F /* Constants */,
 				2D2DD42A2C2B27A7007A0F5A /* Extensions */,
 				2D7939FB2C258070002542DE /* CommonLogic */,
-				2D27860E2C1E2AFB00F34999 /* FileCache */,
 				2D27860A2C1DDEF100F34999 /* Model */,
 			);
 			path = Service;
@@ -347,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				2D2786052C1DC9C000F34999 /* FileCache.swift */,
+				2D7DAB6B2C4EE6D80031A232 /* FileCache + SwiftData.swift */,
 			);
 			path = FileCache;
 			sourceTree = "<group>";
@@ -460,9 +464,17 @@
 			isa = PBXGroup;
 			children = (
 				2D8E38492C26D54300C2BC93 /* ModalState.swift */,
-				2DB7F56A2C31CC23009C65FE /* StorageLogic.swift */,
 			);
 			path = CommonLogic;
+			sourceTree = "<group>";
+		};
+		2D7DAB6D2C4EE7A00031A232 /* StorageLogic */ = {
+			isa = PBXGroup;
+			children = (
+				2DB7F56A2C31CC23009C65FE /* StorageLogic.swift */,
+				2D7DAB6E2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift */,
+			);
+			path = StorageLogic;
 			sourceTree = "<group>";
 		};
 		2D88B4CE2C1D9B0900049A3B = {
@@ -529,6 +541,8 @@
 			isa = PBXGroup;
 			children = (
 				2D90572B2C427B5300CC2442 /* KeychainService.swift */,
+				2D7DAB6D2C4EE7A00031A232 /* StorageLogic */,
+				2D27860E2C1E2AFB00F34999 /* FileCache */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -836,6 +850,7 @@
 				2D90572C2C427B5300CC2442 /* KeychainService.swift in Sources */,
 				2D2A9F502C2B7987002B49EF /* TextFieldFrameModifier.swift in Sources */,
 				2D0D5FC92C40542B0041043F /* MockTodoItems.swift in Sources */,
+				2D7DAB6F2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift in Sources */,
 				2D88B5052C1D9B6D00049A3B /* TodoItem.swift in Sources */,
 				2D8E384A2C26D54300C2BC93 /* ModalState.swift in Sources */,
 				2DE2D8ED2C4927C1003C673C /* AlertData.swift in Sources */,
@@ -853,6 +868,7 @@
 				2D6712982C414BA700E2C99D /* LogFormatter.swift in Sources */,
 				2D3028132C36CFB90087F940 /* UIView+Extension.swift in Sources */,
 				2DD926082C47AFAC00504C40 /* NetworkingElement.swift in Sources */,
+				2D7DAB6C2C4EE6D80031A232 /* FileCache + SwiftData.swift in Sources */,
 				2DE2D8E92C4919EB003C673C /* AlertModifier.swift in Sources */,
 				2D3028062C3480140087F940 /* Category.swift in Sources */,
 				2D1ED7E72C3D351C002C7ED0 /* DetailsViewModel.swift in Sources */,

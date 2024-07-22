@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import SwiftData
 
-struct TodoItem {
+@Model
+class TodoItem {
     enum CodingKeys: String, CaseIterable {
         case id
         case text
@@ -20,7 +22,7 @@ struct TodoItem {
         case categoryName = "category_name"
         case categoryColor = "category_color"
     }
-    let id: UUID
+    @Attribute(.unique) let id: UUID
     let text: String
     let importance: Importance
     let deadline: Date?

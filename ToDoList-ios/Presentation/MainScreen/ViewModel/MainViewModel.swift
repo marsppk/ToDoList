@@ -29,7 +29,7 @@ final class MainViewModel: ObservableObject {
             .sink { [weak self] value in
                 guard let self = self else { return }
                 if value {
-                    loadItems()
+                    updateSortedItems(items: Array(storage.getItems().values))
                     storage.isUpdated = false
                 }
             }
@@ -66,12 +66,8 @@ final class MainViewModel: ObservableObject {
     }
     // MARK: - Networking
     func loadItems() {
-        do {
-            try storage.loadItemsFromJSON()
-        } catch {
-            DDLogError("\(#function): \(error.localizedDescription)")
-            apiManager.alertData = AlertData(message: error.localizedDescription)
-        }
+        storage.loadItemsFromSwiftData()
+        updateSortedItems(items: Array(storage.getItems().values))
         if !storage.checkIsDirty() {
             loadItemsFromServer()
         } else {
@@ -79,23 +75,19 @@ final class MainViewModel: ObservableObject {
         }
     }
     func updateItem(item: TodoItem) {
-        storage.updateItem(item: item)
-        updateSortedItems(items: Array(storage.getItems().values))
-        storage.saveItemsToJSON()
-        apiManager.incrementNumberOfTasks()
+        storage.updateItemInSwiftData(item: item)
         if !storage.checkIsDirty() {
+            apiManager.incrementNumberOfTasks()
             updateItemOnServer(item: item)
         } else {
             syncItems()
         }
     }
-    func deleteItem(id: UUID) {
-        storage.deleteItem(id: id)
-        updateSortedItems(items: Array(self.storage.getItems().values))
-        storage.saveItemsToJSON()
-        apiManager.incrementNumberOfTasks()
+    func deleteItem(item: TodoItem) {
+        storage.deleteItemInSwiftData(item: item)
         if !storage.checkIsDirty() {
-            deleteItemOnServer(id: id)
+            apiManager.incrementNumberOfTasks()
+            deleteItemOnServer(id: item.id)
         } else {
             syncItems()
         }
@@ -104,7 +96,7 @@ final class MainViewModel: ObservableObject {
         if let loadedToken = KeychainService.loadToken(forKey: Constants.key) {
             return loadedToken
         } else {
-            let token = "Enter your token here"
+            let token = "Faelivrin"
             if KeychainService.saveToken(token: token, forKey: Constants.key) {
                 return KeychainService.loadToken(forKey: Constants.key) ?? ""
             } else {
@@ -119,8 +111,6 @@ final class MainViewModel: ObservableObject {
                 let items = try await apiManager.getTodoList()
                 storage.deleteAllItemsThatNotInBackend(items: items)
                 items.forEach(self.storage.updateItemAfterLoading(item:))
-                self.updateSortedItems(items: Array(self.storage.getItems().values))
-                self.storage.saveItemsToJSON()
                 DDLogInfo("\(#function): the items have been loaded successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
@@ -136,8 +126,6 @@ final class MainViewModel: ObservableObject {
                 let items = try await apiManager.updateTodoList(todoList: Array(self.storage.getItems().values))
                 storage.deleteAllItemsThatNotInBackend(items: items)
                 items.forEach(self.storage.updateItemAfterLoading(item:))
-                self.updateSortedItems(items: Array(self.storage.getItems().values))
-                self.storage.saveItemsToJSON()
                 storage.updateIsDirty(value: false)
                 DDLogInfo("\(#function): the items have been synchronized successfully")
             } catch {

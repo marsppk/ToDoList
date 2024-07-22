@@ -10,7 +10,8 @@ import CocoaLumberjackSwift
 
 final class StorageLogic: ObservableObject {
     @Published var isUpdated = false
-    private var fileCache = FileCache()
+    @Published var isShouldSync = false
+    internal var fileCache = FileCache()
     private var categories = [
         Category(name: "Без категории", color: nil),
         Category(name: "Работа", color: "#FB5E5E"),
@@ -112,9 +113,10 @@ final class StorageLogic: ObservableObject {
     func updateItem(item: TodoItem) {
         fileCache.addNewItem(item: item)
     }
+    @MainActor
     func updateItemAfterLoading(item: TodoItem) {
-        guard let oldItem = fileCache.todoItems[item.id] else { return updateItem(item: item) }
-        updateItem(
+        guard let oldItem = fileCache.todoItems[item.id] else { return insertItemInSwiftData(item: item) }
+        updateItemInSwiftData(
             item: TodoItem(
                 id: item.id,
                 text: item.text,
@@ -132,17 +134,11 @@ final class StorageLogic: ObservableObject {
     func deleteItem(id: UUID) -> TodoItem? {
         return fileCache.removeItem(by: id)
     }
-    func deleteAllItemsThatNotInBackend(items: [TodoItem]) {
-        let ids = items.compactMap({ $0.id })
-        for item in fileCache.todoItems.values where !ids.contains(item.id) {
-            deleteItem(id: item.id)
-        }
-    }
     func loadItemsFromJSON() throws {
         try fileCache.getItemsFromJSON(fileName: "test1")
     }
     func saveItemsToJSON() {
-        Task {
+        Task(priority: .userInitiated) {
             do {
                 try fileCache.saveJSON(fileName: "test1")
                 DDLogInfo("\(#function): Items successfully saved")

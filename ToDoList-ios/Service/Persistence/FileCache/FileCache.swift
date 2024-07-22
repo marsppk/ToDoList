@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SwiftData
+import CocoaLumberjackSwift
 
 class FileCache {
     private(set) var todoItems: [UUID: TodoItem] = [:]
@@ -15,6 +17,15 @@ class FileCache {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: "isDirty")
+        }
+    }
+    internal var modelContainer: ModelContainer
+    init() {
+        do {
+            self.modelContainer = try ModelContainer(for: TodoItem.self)
+        } catch {
+            DDLogError("\(#function): \(error.localizedDescription)")
+            fatalError("Could not create ModelContainer: \(error)")
         }
     }
     func updateIsDirtyValue(by newValue: Bool) {

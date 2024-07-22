@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Importance: String, CaseIterable {
+enum Importance: String, CaseIterable, Codable {
     case low
     case basic
     case important

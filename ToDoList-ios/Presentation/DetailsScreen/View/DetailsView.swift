@@ -26,8 +26,8 @@ struct DetailsView: View {
     }
     var deleteButton: some View {
         Button(action: {
-            if let id = modalState.selectedItem?.id {
-                viewModel.deleteToDoItem(id: id, storage: storage)
+            if let item = modalState.selectedItem {
+                viewModel.deleteToDoItem(item: item, storage: storage)
             }
             modalState.activateModalView = false
         }, label: {

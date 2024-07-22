@@ -28,7 +28,7 @@ class DefaultNetworkingService: NetworkingService, ObservableObject, @unchecked 
         return response.list.compactMap(makeTodoItem(from:))
     }
     func getTodoItem(id: String) async throws -> TodoItem? {
-        let request = try makeGetRequest(for: "/list/id")
+        let request = try makeGetRequest(for: "/list/\(id)")
         let (data, _) = try await performRequest(request)
         let response = try JSONDecoder().decode(NetworkingItem.self, from: data)
         if let revision = response.revision {
@@ -99,7 +99,6 @@ class DefaultNetworkingService: NetworkingService, ObservableObject, @unchecked 
         request.httpMethod = "DELETE"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("\(revision)", forHTTPHeaderField: "X-Last-Known-Revision")
-        request.setValue("100", forHTTPHeaderField: "X-Generate-Fails") // generate fails
         return request
     }
     private func makePutRequest(for path: String, data: Data) throws -> URLRequest {
@@ -108,7 +107,6 @@ class DefaultNetworkingService: NetworkingService, ObservableObject, @unchecked 
         request.httpMethod = "PUT"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("\(revision)", forHTTPHeaderField: "X-Last-Known-Revision")
-        request.setValue("50", forHTTPHeaderField: "X-Generate-Fails") // generate fails
         request.httpBody = data
         return request
     }
@@ -118,7 +116,6 @@ class DefaultNetworkingService: NetworkingService, ObservableObject, @unchecked 
         request.httpMethod = "POST"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("\(revision)", forHTTPHeaderField: "X-Last-Known-Revision")
-        request.setValue("50", forHTTPHeaderField: "X-Generate-Fails") // generate fails
         request.httpBody = data
         return request
     }
