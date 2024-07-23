@@ -69,7 +69,7 @@ final class MainViewModel: ObservableObject {
     }
     // MARK: - Networking
     func loadItems() {
-        updateSortedItems()
+        storage.loadItemsFromSwiftData()
         if !storage.checkIsDirty() {
             loadItemsFromServer()
         } else {

@@ -172,6 +172,6 @@ final class StorageLogic: ObservableObject {
         fileCache.updateIsDirtyValue(by: value)
     }
     func getCount() -> Int {
-        return fileCache.count
+        return fileCache.todoItems.values.filter({ $0.isDone == true }).count
     }
 }
