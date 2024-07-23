@@ -14,7 +14,7 @@ final class DetailsViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var title: String = ""
     @Published var categories: [Category] = []
-    @Published var selection = "important"
+    @Published var selection = 2
     @Published var selectionCategory = 0
     @Published var date = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
     @Published var showDate = false
@@ -37,7 +37,7 @@ final class DetailsViewModel: ObservableObject {
     func updateValues(item: TodoItem?) {
         if let item {
             text = item.text
-            selection = item.importance.rawValue
+            selection = item.importance
             if let deadline = item.deadline {
                 date = deadline
                 showDate = true
@@ -75,7 +75,7 @@ final class DetailsViewModel: ObservableObject {
               !showColor && selectedItem?.color != nil ||
               !date.isEqualDay(with: selectedItem?.deadline) && showDate ||
               !showDate && selectedItem?.deadline != nil ||
-              selection != selectedItem?.importance.rawValue ||
+              selection != selectedItem?.importance ||
               text != selectedItem?.text ||
               selectionCategory == categories.count && title != "" ||
               selectionCategory < categories.count && categories[selectionCategory].name != selectedItem?.category.name
@@ -95,7 +95,7 @@ final class DetailsViewModel: ObservableObject {
             do {
                 try await apiManager.addTodoItem(item: item)
                 apiManager.decrementNumberOfTasks()
-                DDLogInfo("\(#function): the item have been added successfully")
+                DDLogInfo("\(#function): the item has been added successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
@@ -125,7 +125,7 @@ final class DetailsViewModel: ObservableObject {
             do {
                 try await apiManager.updateTodoItem(item: item)
                 apiManager.decrementNumberOfTasks()
-                DDLogInfo("\(#function): the item have been updated successfully")
+                DDLogInfo("\(#function): the item has been updated successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
@@ -155,7 +155,7 @@ final class DetailsViewModel: ObservableObject {
             do {
                 try await apiManager.deleteTodoItem(id: id.uuidString)
                 apiManager.decrementNumberOfTasks()
-                DDLogInfo("\(#function): the item have been deleted successfully")
+                DDLogInfo("\(#function): the item has been deleted successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors

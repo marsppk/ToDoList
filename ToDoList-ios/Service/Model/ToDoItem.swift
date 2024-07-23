@@ -24,7 +24,7 @@ class TodoItem {
     }
     @Attribute(.unique) let id: UUID
     let text: String
-    let importance: Importance
+    let importance: Importance.RawValue
     let deadline: Date?
     let isDone: Bool
     let createdAt: Date
@@ -34,7 +34,7 @@ class TodoItem {
     init(
         id: UUID = UUID(),
         text: String,
-        importance: Importance,
+        importance: Importance.RawValue,
         deadline: Date? = nil,
         isDone: Bool = false,
         createdAt: Date = Date(),
@@ -62,13 +62,15 @@ extension TodoItem {
             let dictionary = json as? [String: Any],
             let id = (dictionary[CodingKeys.id.rawValue] as? String).map(UUID.init(uuidString:)) ?? nil,
             let text = dictionary[CodingKeys.text.rawValue] as? String,
-            let importance = (dictionary[CodingKeys.importance.rawValue] as? String)
-                .map(Importance.init(rawValue:)) ?? .basic,
             let isDone = dictionary[CodingKeys.isDone.rawValue] as? Bool,
             let createdAt = (dictionary[CodingKeys.createdAt.rawValue] as? TimeInterval)
                 .map(Date.init(timeIntervalSince1970:)),
             let categoryName = dictionary[CodingKeys.categoryName.rawValue] as? String
         else { return nil }
+        var importance = Importance.basic.rawValue
+        if let importanceValue = dictionary[CodingKeys.importance.rawValue] as? Int {
+            importance = Importance(rawValue: importanceValue)?.rawValue ?? Importance.basic.rawValue
+        }
         let deadline = (dictionary[CodingKeys.deadline.rawValue] as? TimeInterval)
             .map { interval in Date(timeIntervalSince1970: interval) }
         let changedAt = (dictionary[CodingKeys.changedAt.rawValue] as? TimeInterval)
@@ -94,8 +96,8 @@ extension TodoItem {
         var dataDict: [String: Any] = [:]
         dataDict[CodingKeys.id.rawValue] = id.uuidString
         dataDict[CodingKeys.text.rawValue] = text
-        if importance != .basic {
-            dataDict[CodingKeys.importance.rawValue] = importance.rawValue
+        if importance != Importance.basic.rawValue {
+            dataDict[CodingKeys.importance.rawValue] = importance
         }
         if let deadline = deadline {
             dataDict[CodingKeys.deadline.rawValue] = deadline.timeIntervalSince1970
@@ -127,12 +129,16 @@ extension TodoItem {
         guard
             columnsData.count == 10,
             let id = UUID(uuidString: columnsData[0]),
-            let importance = (columnsData[2].isEmpty ? nil : columnsData[2])
-                .map(Importance.init(rawValue:)) ?? .basic,
             let isDone = Bool(columnsData[4]),
             let createdAtInterval = TimeInterval(columnsData[5])
         else { return nil }
         let text = columnsData[1]
+        let importanceString = columnsData[2].isEmpty ? "" : columnsData[2]
+        var importance = Importance.basic
+        if let intValue = Int(importanceString) {
+            importance = Importance(rawValue: intValue) ?? Importance.basic
+        }
+        let importanceRawValue = importance.rawValue
         let createdAt = Date(timeIntervalSince1970: createdAtInterval)
         let deadline = TimeInterval(columnsData[3])
             .map { interval in Date(timeIntervalSince1970: interval) }
@@ -144,7 +150,7 @@ extension TodoItem {
         return TodoItem(
             id: id,
             text: text,
-            importance: importance,
+            importance: importanceRawValue,
             deadline: deadline,
             isDone: isDone,
             createdAt: createdAt,
@@ -167,7 +173,7 @@ extension TodoItem {
         var dataArray: [String] = []
         dataArray.append(id.uuidString)
         dataArray.append(text)
-        dataArray.append(importance != .basic ? importance.rawValue : "")
+        dataArray.append(importance != Importance.basic.rawValue ? String(importance) : "")
         dataArray.append(deadline?.timeIntervalSince1970.description ?? "")
         dataArray.append(isDone.description)
         dataArray.append(createdAt.timeIntervalSince1970.description)

@@ -19,14 +19,18 @@ class FileCache {
             UserDefaults.standard.set(newValue, forKey: "isDirty")
         }
     }
-    internal var modelContainer: ModelContainer
+    var modelContainer: ModelContainer
     init() {
         do {
-            self.modelContainer = try ModelContainer(for: TodoItem.self)
+            let config = ModelConfiguration(isStoredInMemoryOnly: false)
+            self.modelContainer = try ModelContainer(for: TodoItem.self, configurations: config)
         } catch {
             DDLogError("\(#function): \(error.localizedDescription)")
             fatalError("Could not create ModelContainer: \(error)")
         }
+    }
+    var count: Int {
+        Array(todoItems.values).filter({ $0.isDone == true }).count
     }
     func updateIsDirtyValue(by newValue: Bool) {
         isDirty = newValue

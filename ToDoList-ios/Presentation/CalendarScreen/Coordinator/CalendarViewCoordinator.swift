@@ -67,7 +67,7 @@ class CalendarViewCoordinator: NSObject {
                 try await apiManager.updateTodoItem(item: item)
                 storage.isUpdated = true
                 apiManager.decrementNumberOfTasks()
-                DDLogInfo("\(#function): the item have been updated successfully")
+                DDLogInfo("\(#function): the item has been updated successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors

@@ -129,13 +129,13 @@ struct DetailsView: View {
                 .background(Color.primaryBG)
                 .onReceive(modalState.$selectedItem, perform: updateForm)
                 .modifier(KeyboardModifier(isHidden: $viewModel.isHidden))
-                .onChange(of: [viewModel.text, viewModel.selection, currentColorHex, viewModel.title]) {
+                .onChange(of: [viewModel.text, currentColorHex, viewModel.title]) {
                     changeSaveButtonAvailability()
                 }
                 .onChange(of: viewModel.date) {
                     changeSaveButtonAvailability()
                 }
-                .onChange(of: viewModel.selectionCategory) {
+                .onChange(of: [viewModel.selectionCategory, viewModel.selection]) {
                     updateCategory()
                 }
                 .onChange(of: viewModel.showDate) { _, value in

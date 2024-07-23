@@ -155,7 +155,7 @@ class DefaultNetworkingService: NetworkingService, ObservableObject, @unchecked 
     private func makeTodoItem(from element: NetworkingElement) -> TodoItem? {
         guard
             let id = UUID(uuidString: element.id),
-            let importance = Importance(rawValue: element.importance)
+            let importance = Importance.calculateImportance(string: element.importance)
         else {
             return nil
         }
@@ -177,7 +177,7 @@ class DefaultNetworkingService: NetworkingService, ObservableObject, @unchecked 
         return NetworkingElement(
             id: todoItem.id.uuidString,
             text: todoItem.text,
-            importance: todoItem.importance.rawValue,
+            importance: Importance(rawValue: todoItem.importance)!.title,
             deadline: todoItem.deadline.map({ Int($0.timeIntervalSince1970) }),
             isDone: todoItem.isDone,
             color: todoItem.color,

@@ -21,19 +21,17 @@ struct MainView: View {
             Button(
                 action: {
                     viewModel.changeShowButtonValue()
-                    viewModel.updateSortedItems(items: Array(viewModel.storage.getItems().values))
                 },
                 label: {
-                    Text(viewModel.showButtonText)
+                    Text(viewModel.filterType.rawValue)
                 }
             )
             Button(
                 action: {
                     viewModel.changeSortButtonValue()
-                    viewModel.updateSortedItems(items: Array(viewModel.storage.getItems().values))
                 },
                 label: {
-                    Text(viewModel.sortButtonText)
+                    Text(viewModel.sortType.rawValue)
                 }
             )
         } label: {

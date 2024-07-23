@@ -11,7 +11,7 @@ import CocoaLumberjackSwift
 final class StorageLogic: ObservableObject {
     @Published var isUpdated = false
     @Published var isShouldSync = false
-    internal var fileCache = FileCache()
+    var fileCache = FileCache()
     private var categories = [
         Category(name: "Без категории", color: nil),
         Category(name: "Работа", color: "#FB5E5E"),
@@ -20,7 +20,7 @@ final class StorageLogic: ObservableObject {
     ]
     func createNewItem(
         item: TodoItem?,
-        textAndImportance: (String, String),
+        textAndImportance: (String, Int),
         deadline: Date?,
         color: String?,
         category: Category
@@ -34,7 +34,7 @@ final class StorageLogic: ObservableObject {
             return TodoItem(
                 id: item.id,
                 text: text,
-                importance: Importance(rawValue: importance)!,
+                importance: importance,
                 deadline: deadline,
                 isDone: false,
                 createdAt: item.createdAt,
@@ -48,7 +48,7 @@ final class StorageLogic: ObservableObject {
             }
             return TodoItem(
                 text: text,
-                importance: Importance(rawValue: importance)!,
+                importance: importance,
                 deadline: deadline,
                 isDone: false,
                 createdAt: Date(),
@@ -159,16 +159,19 @@ final class StorageLogic: ObservableObject {
     func getItemsForSection(section: Int) -> [TodoItem] {
         let sections = getSections()
         if section == sections.count {
-            return fileCache.todoItems.values.filter({ $0.deadline == nil })
+            return fileCache.todoItems.values.filter({ $0.deadline == nil }).sorted(by: { $0.createdAt < $1.createdAt })
         }
         return fileCache.todoItems.values.filter({
             ($0.deadline != nil) && $0.deadline!.makeEqualDates() == sections[section]
-        })
+        }).sorted(by: { $0.createdAt < $1.createdAt })
     }
     func checkIsDirty() -> Bool {
         return fileCache.isDirty
     }
     func updateIsDirty(value: Bool) {
         fileCache.updateIsDirtyValue(by: value)
+    }
+    func getCount() -> Int {
+        return fileCache.count
     }
 }

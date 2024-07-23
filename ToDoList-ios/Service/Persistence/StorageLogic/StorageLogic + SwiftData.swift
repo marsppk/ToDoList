@@ -41,6 +41,10 @@ extension StorageLogic {
         loadItemsFromSwiftData()
     }
     @MainActor
+    func loadSortedItemsFromSwiftData(sortType: SortType, filterType: FilterType) -> [TodoItem] {
+        return fileCache.fetchSorted(sortType: sortType, filterType: filterType)
+    }
+    @MainActor
     func updateItemInSwiftDataAfterLoading(item: TodoItem) {
         guard let oldItem = fileCache.get(item.id) else { return fileCache.update(item) }
         fileCache.update(
