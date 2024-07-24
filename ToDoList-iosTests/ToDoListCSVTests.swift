@@ -21,7 +21,7 @@ final class ToDoListCSVTests: XCTestCase {
         let arrayOfData = csvString.components(separatedBy: TodoItem.csvColumnsDelimiter)
         XCTAssertEqual(arrayOfData[0], todoitem.id.uuidString)
         XCTAssertEqual(arrayOfData[1], todoitem.text)
-        XCTAssertEqual(arrayOfData[2], todoitem.importance.rawValue)
+        XCTAssertEqual(arrayOfData[2], String(todoitem.importance))
         XCTAssertEqual(arrayOfData[3], todoitem.deadline?.timeIntervalSince1970.description)
         XCTAssertEqual(arrayOfData[4], todoitem.isDone.description)
         XCTAssertEqual(arrayOfData[5], todoitem.createdAt.timeIntervalSince1970.description)
@@ -78,7 +78,7 @@ final class ToDoListCSVTests: XCTestCase {
         guard let todoitem = todoitem else { throw CSVErrors.csvParsingIncorrect }
         XCTAssertEqual(todoitem.id.uuidString, values[0])
         XCTAssertEqual(todoitem.text, values[1])
-        XCTAssertEqual(todoitem.importance, .important)
+        XCTAssertEqual(todoitem.importance, Importance.important.rawValue)
         XCTAssertEqual(todoitem.deadline?.timeIntervalSince1970.description, values[3])
         XCTAssertEqual(todoitem.isDone.description, values[4])
         XCTAssertEqual(todoitem.createdAt.timeIntervalSince1970.description, values[5])
@@ -90,7 +90,7 @@ final class ToDoListCSVTests: XCTestCase {
         let csvString = values.joined(separator: TodoItem.csvColumnsDelimiter)
         let todoitem = TodoItem.parse(csv: csvString)
         guard let todoitem = todoitem else { throw CSVErrors.csvParsingIncorrect }
-        XCTAssertEqual(todoitem.importance, .basic)
+        XCTAssertEqual(todoitem.importance, Importance.basic.rawValue)
     }
     @MainActor func testParcingWithoutDeadline() throws {
         let values = DataForParsing.itemWithoutDeadline
@@ -154,10 +154,11 @@ final class ToDoListCSVTests: XCTestCase {
         let values = DataForParsing.itemWithIncorrectImportance
         let csvString = values.joined(separator: TodoItem.csvColumnsDelimiter)
         let todoitem = TodoItem.parse(csv: csvString)
-        XCTAssertNil(todoitem)
+        guard let todoitem = todoitem else { throw CSVErrors.csvParsingIncorrect }
+        XCTAssertEqual(todoitem.importance, Importance.basic.rawValue)
     }
     @MainActor func testParcingWithIncorrectCreatedAtValue() throws {
-        let values = DataForParsing.itemWithIncorrectChangedAt
+        let values = DataForParsing.itemWithIncorrectCreatedAt
         let csvString = values.joined(separator: TodoItem.csvColumnsDelimiter)
         let todoitem = TodoItem.parse(csv: csvString)
         XCTAssertNil(todoitem)

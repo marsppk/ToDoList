@@ -10,7 +10,8 @@ import CocoaLumberjackSwift
 
 final class StorageLogic: ObservableObject {
     @Published var isUpdated = false
-    private var fileCache = FileCache()
+    @Published var isShouldSync = false
+    var fileCache = FileCache()
     private var categories = [
         Category(name: "Без категории", color: nil),
         Category(name: "Работа", color: "#FB5E5E"),
@@ -19,7 +20,7 @@ final class StorageLogic: ObservableObject {
     ]
     func createNewItem(
         item: TodoItem?,
-        textAndImportance: (String, String),
+        textAndImportance: (String, Int),
         deadline: Date?,
         color: String?,
         category: Category
@@ -33,7 +34,7 @@ final class StorageLogic: ObservableObject {
             return TodoItem(
                 id: item.id,
                 text: text,
-                importance: Importance(rawValue: importance)!,
+                importance: importance,
                 deadline: deadline,
                 isDone: false,
                 createdAt: item.createdAt,
@@ -47,7 +48,7 @@ final class StorageLogic: ObservableObject {
             }
             return TodoItem(
                 text: text,
-                importance: Importance(rawValue: importance)!,
+                importance: importance,
                 deadline: deadline,
                 isDone: false,
                 createdAt: Date(),
@@ -112,37 +113,15 @@ final class StorageLogic: ObservableObject {
     func updateItem(item: TodoItem) {
         fileCache.addNewItem(item: item)
     }
-    func updateItemAfterLoading(item: TodoItem) {
-        guard let oldItem = fileCache.todoItems[item.id] else { return updateItem(item: item) }
-        updateItem(
-            item: TodoItem(
-                id: item.id,
-                text: item.text,
-                importance: item.importance,
-                deadline: item.deadline,
-                isDone: item.isDone,
-                createdAt: item.createdAt,
-                changedAt: item.changedAt,
-                color: item.color,
-                category: oldItem.category
-            )
-        )
-    }
     @discardableResult
     func deleteItem(id: UUID) -> TodoItem? {
         return fileCache.removeItem(by: id)
-    }
-    func deleteAllItemsThatNotInBackend(items: [TodoItem]) {
-        let ids = items.compactMap({ $0.id })
-        for item in fileCache.todoItems.values where !ids.contains(item.id) {
-            deleteItem(id: item.id)
-        }
     }
     func loadItemsFromJSON() throws {
         try fileCache.getItemsFromJSON(fileName: "test1")
     }
     func saveItemsToJSON() {
-        Task {
+        Task(priority: .userInitiated) {
             do {
                 try fileCache.saveJSON(fileName: "test1")
                 DDLogInfo("\(#function): Items successfully saved")
@@ -163,16 +142,19 @@ final class StorageLogic: ObservableObject {
     func getItemsForSection(section: Int) -> [TodoItem] {
         let sections = getSections()
         if section == sections.count {
-            return fileCache.todoItems.values.filter({ $0.deadline == nil })
+            return fileCache.todoItems.values.filter({ $0.deadline == nil }).sorted(by: { $0.createdAt < $1.createdAt })
         }
         return fileCache.todoItems.values.filter({
             ($0.deadline != nil) && $0.deadline!.makeEqualDates() == sections[section]
-        })
+        }).sorted(by: { $0.createdAt < $1.createdAt })
     }
     func checkIsDirty() -> Bool {
         return fileCache.isDirty
     }
     func updateIsDirty(value: Bool) {
         fileCache.updateIsDirtyValue(by: value)
+    }
+    func getCount() -> Int {
+        return fileCache.count
     }
 }

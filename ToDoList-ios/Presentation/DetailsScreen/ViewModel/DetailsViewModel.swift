@@ -14,7 +14,7 @@ final class DetailsViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var title: String = ""
     @Published var categories: [Category] = []
-    @Published var selection = "important"
+    @Published var selection = 2
     @Published var selectionCategory = 0
     @Published var date = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
     @Published var showDate = false
@@ -37,7 +37,7 @@ final class DetailsViewModel: ObservableObject {
     func updateValues(item: TodoItem?) {
         if let item {
             text = item.text
-            selection = item.importance.rawValue
+            selection = item.importance
             if let deadline = item.deadline {
                 date = deadline
                 showDate = true
@@ -75,7 +75,7 @@ final class DetailsViewModel: ObservableObject {
               !showColor && selectedItem?.color != nil ||
               !date.isEqualDay(with: selectedItem?.deadline) && showDate ||
               !showDate && selectedItem?.deadline != nil ||
-              selection != selectedItem?.importance.rawValue ||
+              selection != selectedItem?.importance ||
               text != selectedItem?.text ||
               selectionCategory == categories.count && title != "" ||
               selectionCategory < categories.count && categories[selectionCategory].name != selectedItem?.category.name
@@ -86,8 +86,7 @@ final class DetailsViewModel: ObservableObject {
         isDisabledSave = false
     }
     func addToDoItem(item: TodoItem, storage: StorageLogic) {
-        storage.updateItem(item: item)
-        storage.saveItemsToJSON()
+        storage.insertItemInPersistence(item: item)
         apiManager.incrementNumberOfTasks()
         addToDoItemOnServer(item: item, storage: storage)
     }
@@ -95,9 +94,8 @@ final class DetailsViewModel: ObservableObject {
         Task {
             do {
                 try await apiManager.addTodoItem(item: item)
-                storage.isUpdated = true
                 apiManager.decrementNumberOfTasks()
-                DDLogInfo("\(#function): the item have been added successfully")
+                DDLogInfo("\(#function): the item has been added successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
@@ -113,14 +111,12 @@ final class DetailsViewModel: ObservableObject {
                 } else {
                     storage.updateIsDirty(value: true)
                     apiManager.decrementNumberOfTasks()
-                    storage.isUpdated = true
                 }
             }
         }
     }
     func updateToDoItem(item: TodoItem, storage: StorageLogic) {
-        storage.updateItem(item: item)
-        storage.saveItemsToJSON()
+        storage.updateItemInPersistence(item: item)
         apiManager.incrementNumberOfTasks()
         updateToDoItemOnServer(item: item, storage: storage)
     }
@@ -128,9 +124,8 @@ final class DetailsViewModel: ObservableObject {
         Task {
             do {
                 try await apiManager.updateTodoItem(item: item)
-                storage.isUpdated = true
                 apiManager.decrementNumberOfTasks()
-                DDLogInfo("\(#function): the item have been updated successfully")
+                DDLogInfo("\(#function): the item has been updated successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
@@ -146,24 +141,21 @@ final class DetailsViewModel: ObservableObject {
                 } else {
                     storage.updateIsDirty(value: true)
                     apiManager.decrementNumberOfTasks()
-                    storage.isUpdated = true
                 }
             }
         }
     }
-    func deleteToDoItem(id: UUID, storage: StorageLogic) {
-        storage.deleteItem(id: id)
-        storage.saveItemsToJSON()
+    func deleteToDoItem(item: TodoItem, storage: StorageLogic) {
+        storage.deleteItemInPersistence(item: item)
         apiManager.incrementNumberOfTasks()
-        deleteToDoItemOnServer(id: id, storage: storage)
+        deleteToDoItemOnServer(id: item.id, storage: storage)
     }
     func deleteToDoItemOnServer(id: UUID, storage: StorageLogic, retryDelay: Int = Delay.minDelay) {
         Task {
             do {
                 try await apiManager.deleteTodoItem(id: id.uuidString)
-                storage.isUpdated = true
                 apiManager.decrementNumberOfTasks()
-                DDLogInfo("\(#function): the item have been deleted successfully")
+                DDLogInfo("\(#function): the item has been deleted successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
@@ -179,7 +171,6 @@ final class DetailsViewModel: ObservableObject {
                 } else {
                     storage.updateIsDirty(value: true)
                     apiManager.decrementNumberOfTasks()
-                    storage.isUpdated = true
                 }
             }
         }

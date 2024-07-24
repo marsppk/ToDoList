@@ -42,16 +42,12 @@ class CalendarViewCoordinator: NSObject {
     @objc func plusButtonPressed() {
         modalState.changeValues(item: nil)
     }
-    func updateData() {
-        do {
-            try storage.loadItemsFromJSON()
-        } catch {
-           DDLogError("\(#function): \(error.localizedDescription)")
-        }
-    }
     func reloadData() {
         view.collectionView.reloadData()
         view.tableView.reloadData()
+    }
+    func updateData() {
+        storage.loadItemsFromPersistence()
     }
     func countNumberOfSections() -> Int {
         var anotherCategory = 0
@@ -61,8 +57,7 @@ class CalendarViewCoordinator: NSObject {
         return storage.getItems().count == 0 ? 0 : sections.count + anotherCategory
     }
     func updateToDoItem(item: TodoItem) {
-        storage.updateItem(item: item)
-        storage.saveItemsToJSON()
+        storage.updateItemInPersistence(item: item)
         apiManager.incrementNumberOfTasks()
         updateToDoItemOnServer(item: item)
     }
@@ -72,7 +67,7 @@ class CalendarViewCoordinator: NSObject {
                 try await apiManager.updateTodoItem(item: item)
                 storage.isUpdated = true
                 apiManager.decrementNumberOfTasks()
-                DDLogInfo("\(#function): the item have been updated successfully")
+                DDLogInfo("\(#function): the item has been updated successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors

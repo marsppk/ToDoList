@@ -16,10 +16,10 @@ struct ImportanceView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color(UIColor.label))
             Picker("Picker", selection: $viewModel.selection) {
-                Image(systemName: "arrow.down").tag("low")
+                Image(systemName: "arrow.down").tag(0)
                     .foregroundStyle(.gray, .blue)
-                Text("нет").tag("basic")
-                Image(systemName: "exclamationmark.2").tag("important")
+                Text("нет").tag(1)
+                Image(systemName: "exclamationmark.2").tag(2)
                     .foregroundStyle(.red, .blue)
             }
             .frame(width: 150)

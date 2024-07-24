@@ -7,10 +7,11 @@
 
 import Foundation
 
+@MainActor
 class MockTodoItems {
     static let itemWithAllProperties = TodoItem(
         text: "5",
-        importance: .important,
+        importance: Importance.important.rawValue,
         deadline: Date(),
         isDone: false,
         changedAt: Date(),
@@ -22,7 +23,7 @@ class MockTodoItems {
     )
     static let itemWithoutDeadline = TodoItem(
         text: "5",
-        importance: .important,
+        importance: Importance.important.rawValue,
         isDone: false,
         changedAt: Date(),
         color: "#FFFFFF",
@@ -33,7 +34,7 @@ class MockTodoItems {
     )
     static let itemWithoutColor = TodoItem(
         text: "5",
-        importance: .important,
+        importance: Importance.important.rawValue,
         deadline: Date(),
         isDone: false,
         changedAt: Date(),
@@ -44,7 +45,7 @@ class MockTodoItems {
     )
     static let itemWithoutCategoryColor = TodoItem(
         text: "5",
-        importance: .important,
+        importance: Importance.important.rawValue,
         deadline: Date(),
         isDone: false,
         changedAt: Date(),
@@ -56,7 +57,7 @@ class MockTodoItems {
     )
     static let itemWithoutChangedAt = TodoItem(
         text: "5",
-        importance: .important,
+        importance: Importance.important.rawValue,
         deadline: Date(),
         isDone: false,
         color: "#FFFFFF",
@@ -67,7 +68,7 @@ class MockTodoItems {
     )
     static let itemWithBasicImportance = TodoItem(
         text: "5",
-        importance: .basic,
+        importance: Importance.basic.rawValue,
         deadline: Date(),
         isDone: false,
         changedAt: Date(),

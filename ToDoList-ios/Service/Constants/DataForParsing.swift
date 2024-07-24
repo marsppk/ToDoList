@@ -12,7 +12,7 @@ class DataForParsing {
     static let itemWithAllProperties = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         Date().timeIntervalSince1970.description,
@@ -36,7 +36,7 @@ class DataForParsing {
     static let itemWithoutDeadline = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         "",
         "false",
         Date().timeIntervalSince1970.description,
@@ -48,7 +48,7 @@ class DataForParsing {
     static let itemWithoutCategoryColor = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         "",
         "false",
         Date().timeIntervalSince1970.description,
@@ -60,7 +60,7 @@ class DataForParsing {
     static let itemWithoutChangedAt = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         Date().timeIntervalSince1970.description,
@@ -72,7 +72,7 @@ class DataForParsing {
     static let itemWithoutColor = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         Date().timeIntervalSince1970.description,
@@ -84,7 +84,7 @@ class DataForParsing {
     static let itemWithExtraLine = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         Date().timeIntervalSince1970.description,
@@ -97,7 +97,7 @@ class DataForParsing {
     static let itemWithoutNecessaryProperties = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         Date().timeIntervalSince1970.description
@@ -105,7 +105,7 @@ class DataForParsing {
     static let itemWithoutId = [
         "",
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         Date().timeIntervalSince1970.description,
@@ -117,7 +117,7 @@ class DataForParsing {
     static let itemWithIncorrectIsDone = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "52",
         Date().timeIntervalSince1970.description,
@@ -141,7 +141,7 @@ class DataForParsing {
     static let itemWithIncorrectCreatedAt = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         "sdd",
@@ -153,7 +153,7 @@ class DataForParsing {
     static let itemWithoutCreatedAt = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         "",
@@ -165,7 +165,7 @@ class DataForParsing {
     static let itemWithEmptyIsDone = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "",
         Date().timeIntervalSince1970.description,
@@ -177,7 +177,7 @@ class DataForParsing {
     static let itemWithIncorrectDeadline = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         "f",
         "false",
         Date().timeIntervalSince1970.description,
@@ -189,7 +189,7 @@ class DataForParsing {
     static let itemWithIncorrectChangedAt = [
         UUID().uuidString,
         "5",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         Date().timeIntervalSince1970.description,
@@ -201,7 +201,7 @@ class DataForParsing {
     static let itemWithCommaInText = [
         UUID().uuidString,
         "5, 3",
-        "important",
+        "2",
         Date().timeIntervalSince1970.description,
         "false",
         Date().timeIntervalSince1970.description,
@@ -213,7 +213,7 @@ class DataForParsing {
     static let itemWithAllPropertiesForJSON: [Any] = [
         UUID().uuidString,
         "5",
-        "important",
+        2,
         Date().timeIntervalSince1970,
         false,
         Date().timeIntervalSince1970,

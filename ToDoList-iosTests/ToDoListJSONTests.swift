@@ -19,7 +19,7 @@ final class ToDoListJSONTests: XCTestCase {
         guard let jsonData = jsonData as? [String: Any] else { throw JSONErrors.jsonComputedPropertyIncorrect }
         XCTAssertEqual(jsonData["id"] as? String, todoitem.id.uuidString)
         XCTAssertEqual(jsonData["text"] as? String, todoitem.text)
-        XCTAssertEqual(jsonData["importance"] as? String, todoitem.importance.rawValue)
+        XCTAssertEqual(jsonData["importance"] as? Int, todoitem.importance)
         XCTAssertEqual(jsonData["deadline"] as? TimeInterval, todoitem.deadline?.timeIntervalSince1970)
         XCTAssertEqual(jsonData["is_done"] as? Bool, todoitem.isDone)
         XCTAssertEqual(jsonData["created_at"] as? TimeInterval, todoitem.createdAt.timeIntervalSince1970)
@@ -69,7 +69,7 @@ final class ToDoListJSONTests: XCTestCase {
         guard let todoitem = todoitem else { throw JSONErrors.jsonParsingIncorrect }
         XCTAssertEqual(todoitem.id.uuidString, values[0] as? String)
         XCTAssertEqual(todoitem.text, values[1] as? String)
-        XCTAssertEqual(todoitem.importance, .important)
+        XCTAssertEqual(todoitem.importance, Importance.important.rawValue)
         XCTAssertEqual(todoitem.deadline?.timeIntervalSince1970, values[3] as? TimeInterval)
         XCTAssertEqual(todoitem.isDone, values[4] as? Bool)
         XCTAssertEqual(todoitem.createdAt.timeIntervalSince1970, values[5] as? TimeInterval)
@@ -87,7 +87,7 @@ final class ToDoListJSONTests: XCTestCase {
         dictionary[TodoItem.CodingKeys.importance.rawValue] = nil
         let todoitem = TodoItem.parse(json: dictionary)
         guard let todoitem = todoitem else { throw JSONErrors.jsonParsingIncorrect }
-        XCTAssertEqual(todoitem.importance, .basic)
+        XCTAssertEqual(todoitem.importance, Importance.basic.rawValue)
     }
     @MainActor func testParcingWithoutColor() throws {
         let values: [Any?] = DataForParsing.itemWithAllPropertiesForJSON
@@ -180,9 +180,10 @@ final class ToDoListJSONTests: XCTestCase {
         for elem in TodoItem.CodingKeys.allCases.enumerated() {
             dictionary[elem.element.rawValue] = values[elem.offset]
         }
-        dictionary[TodoItem.CodingKeys.importance.rawValue] = "cool"
+        dictionary[TodoItem.CodingKeys.importance.rawValue] = 3
         let todoitem = TodoItem.parse(json: dictionary)
-        XCTAssertNil(todoitem)
+        guard let todoitem = todoitem else { throw JSONErrors.jsonParsingIncorrect }
+        XCTAssertEqual(todoitem.importance, Importance.basic.rawValue)
     }
     @MainActor func testParcingWithIncorrectCreatedAtValue() throws {
         let values: [Any] = DataForParsing.itemWithAllPropertiesForJSON

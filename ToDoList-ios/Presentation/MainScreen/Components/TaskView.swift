@@ -13,14 +13,14 @@ struct TaskView: View {
     @EnvironmentObject var modalState: ModalState
     var circleBackground: some View {
         RoundedRectangle(cornerRadius: 16)
-            .fill(item.importance == .important && !item.isDone ? .red.opacity(0.2) : .clear)
+            .fill(item.importance == Importance.important.rawValue && !item.isDone ? .red.opacity(0.2) : .clear)
             .frame(width: 24, height: 24)
     }
     var circleImage: some View {
         Image(systemName: item.isDone ? "checkmark.circle.fill" : "circle")
             .resizable()
             .frame(width: 24, height: 24)
-            .foregroundStyle(item.isDone ? .green : (item.importance == .important ? .red : .gray))
+            .foregroundStyle(item.isDone ? .green : (item.importance == Importance.important.rawValue ? .red : .gray))
             .background(circleBackground)
             .gesture(
                 TapGesture().onEnded {
@@ -75,9 +75,9 @@ struct TaskView: View {
     @ViewBuilder
     func chooseTextStyle() -> some View {
         switch (item.importance, item.isDone) {
-        case (.important, false):
+        case (Importance.important.rawValue, false):
             textWithExclamationMark
-        case (.low, false):
+        case (Importance.low.rawValue, false):
             textWithArrowDown
         default:
             Text(item.text)

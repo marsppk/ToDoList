@@ -21,19 +21,17 @@ struct MainView: View {
             Button(
                 action: {
                     viewModel.changeShowButtonValue()
-                    viewModel.updateSortedItems(items: Array(viewModel.storage.getItems().values))
                 },
                 label: {
-                    Text(viewModel.showButtonText)
+                    Text(viewModel.filterType.rawValue)
                 }
             )
             Button(
                 action: {
                     viewModel.changeSortButtonValue()
-                    viewModel.updateSortedItems(items: Array(viewModel.storage.getItems().values))
                 },
                 label: {
-                    Text(viewModel.sortButtonText)
+                    Text(viewModel.sortType.rawValue)
                 }
             )
         } label: {
@@ -82,7 +80,7 @@ struct MainView: View {
                     }
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
-                            viewModel.deleteItem(id: item.wrappedValue.id)
+                            viewModel.deleteItem(item: item.wrappedValue)
                         } label: {
                             Image(systemName: "trash.fill")
                         }

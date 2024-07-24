@@ -9,14 +9,24 @@ import Foundation
 import Combine
 import CocoaLumberjackSwift
 
+enum SortType: String {
+    case significance = "Сортировать по добавлению"
+    case date = "Сортировать по важности"
+}
+
+enum FilterType: String {
+    case show = "Скрыть выполненное"
+    case hide = "Показать выполненное"
+}
+
 @MainActor
 final class MainViewModel: ObservableObject {
     @Published var storage = StorageLogic()
-    @Published var showButtonText = "Показать выполненное"
-    @Published var sortButtonText = "Сортировать по важности"
     @Published var sortedItems: [TodoItem] = []
     @Published var count = 0
     @Published var isActive = false
+    @Published var sortType: SortType = .date
+    @Published var filterType: FilterType = .hide
     private var deviceID: String
     private var cancellables = Set<AnyCancellable>()
     lazy var apiManager: DefaultNetworkingService = {
@@ -29,7 +39,7 @@ final class MainViewModel: ObservableObject {
             .sink { [weak self] value in
                 guard let self = self else { return }
                 if value {
-                    loadItems()
+                    updateSortedItems()
                     storage.isUpdated = false
                 }
             }
@@ -45,33 +55,21 @@ final class MainViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    func updateSortedItems(items: [TodoItem]) {
-        sortedItems = showButtonText == "Показать выполненное" ?
-        Array(items.filter({ $0.isDone == false })) :
-        Array(items)
-        if sortButtonText == "Сортировать по добавлению" {
-            sortedItems.sort(by: {$0.importance.getIndex() > $1.importance.getIndex()})
-        } else {
-            sortedItems.sort(by: {$0.createdAt < $1.createdAt})
-        }
-        count = items.filter({ $0.isDone == true }).count
+    func updateSortedItems() {
+        sortedItems = storage.loadSortedItemsFromPersistence(sortType: sortType, filterType: filterType)
+        count = storage.getCount()
     }
     func changeShowButtonValue() {
-        showButtonText = showButtonText == "Показать выполненное" ? "Скрыть выполненное" : "Показать выполненное"
+        filterType = filterType == .hide ? .show : .hide
+        updateSortedItems()
     }
     func changeSortButtonValue() {
-        sortButtonText = sortButtonText == "Сортировать по важности" ?
-        "Сортировать по добавлению" :
-        "Сортировать по важности"
+        sortType = sortType == .significance ? .date : .significance
+        updateSortedItems()
     }
     // MARK: - Networking
     func loadItems() {
-        do {
-            try storage.loadItemsFromJSON()
-        } catch {
-            DDLogError("\(#function): \(error.localizedDescription)")
-            apiManager.alertData = AlertData(message: error.localizedDescription)
-        }
+        storage.loadItemsFromPersistence()
         if !storage.checkIsDirty() {
             loadItemsFromServer()
         } else {
@@ -79,23 +77,21 @@ final class MainViewModel: ObservableObject {
         }
     }
     func updateItem(item: TodoItem) {
-        storage.updateItem(item: item)
-        updateSortedItems(items: Array(storage.getItems().values))
-        storage.saveItemsToJSON()
-        apiManager.incrementNumberOfTasks()
+        storage.updateItemInPersistence(item: item)
+        updateSortedItems()
         if !storage.checkIsDirty() {
+            apiManager.incrementNumberOfTasks()
             updateItemOnServer(item: item)
         } else {
             syncItems()
         }
     }
-    func deleteItem(id: UUID) {
-        storage.deleteItem(id: id)
-        updateSortedItems(items: Array(self.storage.getItems().values))
-        storage.saveItemsToJSON()
-        apiManager.incrementNumberOfTasks()
+    func deleteItem(item: TodoItem) {
+        storage.deleteItemInPersistence(item: item)
+        updateSortedItems()
         if !storage.checkIsDirty() {
-            deleteItemOnServer(id: id)
+            apiManager.incrementNumberOfTasks()
+            deleteItemOnServer(id: item.id)
         } else {
             syncItems()
         }
@@ -104,7 +100,7 @@ final class MainViewModel: ObservableObject {
         if let loadedToken = KeychainService.loadToken(forKey: Constants.key) {
             return loadedToken
         } else {
-            let token = "Enter your token here"
+            let token = "Faelivrin"
             if KeychainService.saveToken(token: token, forKey: Constants.key) {
                 return KeychainService.loadToken(forKey: Constants.key) ?? ""
             } else {
@@ -118,9 +114,8 @@ final class MainViewModel: ObservableObject {
             do {
                 let items = try await apiManager.getTodoList()
                 storage.deleteAllItemsThatNotInBackend(items: items)
-                items.forEach(self.storage.updateItemAfterLoading(item:))
-                self.updateSortedItems(items: Array(self.storage.getItems().values))
-                self.storage.saveItemsToJSON()
+                items.forEach(self.storage.updateItemInPersistenceAfterLoading(item:))
+                storage.loadItemsFromPersistence()
                 DDLogInfo("\(#function): the items have been loaded successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
@@ -135,9 +130,8 @@ final class MainViewModel: ObservableObject {
             do {
                 let items = try await apiManager.updateTodoList(todoList: Array(self.storage.getItems().values))
                 storage.deleteAllItemsThatNotInBackend(items: items)
-                items.forEach(self.storage.updateItemAfterLoading(item:))
-                self.updateSortedItems(items: Array(self.storage.getItems().values))
-                self.storage.saveItemsToJSON()
+                items.forEach(self.storage.updateItemInPersistenceAfterLoading(item:))
+                storage.loadItemsFromPersistence()
                 storage.updateIsDirty(value: false)
                 DDLogInfo("\(#function): the items have been synchronized successfully")
             } catch {
@@ -151,7 +145,7 @@ final class MainViewModel: ObservableObject {
         Task {
             do {
                 try await apiManager.updateTodoItem(item: item)
-                DDLogInfo("\(#function): the item have been updated successfully")
+                DDLogInfo("\(#function): the item has been updated successfully")
                 apiManager.decrementNumberOfTasks()
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
@@ -174,7 +168,7 @@ final class MainViewModel: ObservableObject {
             do {
                 try await apiManager.deleteTodoItem(id: id.uuidString)
                 apiManager.decrementNumberOfTasks()
-                DDLogInfo("\(#function): the item have been deleted successfully")
+                DDLogInfo("\(#function): the item has been deleted successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
