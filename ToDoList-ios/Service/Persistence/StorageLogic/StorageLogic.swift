@@ -113,23 +113,6 @@ final class StorageLogic: ObservableObject {
     func updateItem(item: TodoItem) {
         fileCache.addNewItem(item: item)
     }
-    @MainActor
-    func updateItemAfterLoading(item: TodoItem) {
-        guard let oldItem = fileCache.todoItems[item.id] else { return insertItemInSwiftData(item: item) }
-        updateItemInSwiftData(
-            item: TodoItem(
-                id: item.id,
-                text: item.text,
-                importance: item.importance,
-                deadline: item.deadline,
-                isDone: item.isDone,
-                createdAt: item.createdAt,
-                changedAt: item.changedAt,
-                color: item.color,
-                category: oldItem.category
-            )
-        )
-    }
     @discardableResult
     func deleteItem(id: UUID) -> TodoItem? {
         return fileCache.removeItem(by: id)
@@ -172,6 +155,6 @@ final class StorageLogic: ObservableObject {
         fileCache.updateIsDirtyValue(by: value)
     }
     func getCount() -> Int {
-        return fileCache.todoItems.values.filter({ $0.isDone == true }).count
+        return fileCache.count
     }
 }

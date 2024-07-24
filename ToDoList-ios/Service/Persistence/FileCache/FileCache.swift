@@ -7,7 +7,13 @@
 
 import Foundation
 import SwiftData
+import SQLite
 import CocoaLumberjackSwift
+
+enum TypeOfStorage {
+    case SQLite
+    case swiftData
+}
 
 class FileCache {
     private(set) var todoItems: [UUID: TodoItem] = [:]
@@ -19,18 +25,17 @@ class FileCache {
             UserDefaults.standard.set(newValue, forKey: "isDirty")
         }
     }
-    var modelContainer: ModelContainer
-    init() {
-        do {
-            let config = ModelConfiguration(isStoredInMemoryOnly: false)
-            self.modelContainer = try ModelContainer(for: TodoItem.self, configurations: config)
-        } catch {
-            DDLogError("\(#function): \(error.localizedDescription)")
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }
+    var dbConnection: Connection?
+    var modelContainer: ModelContainer?
+    var type: TypeOfStorage = .swiftData
     var count: Int {
         Array(todoItems.values).filter({ $0.isDone == true }).count
+    }
+    init() {
+        getSelectedStorage()
+        createModelContainer()
+        createDatabaseConnection()
+        createTable(ifNotExists: true)
     }
     func updateIsDirtyValue(by newValue: Bool) {
         isDirty = newValue
@@ -77,6 +82,24 @@ class FileCache {
             }
         }
     }
+    private func createDatabaseConnection() {
+        let databaseFileURL = getURL(for: Constants.SQLite.file)
+        do {
+            self.dbConnection = try Connection(databaseFileURL.path)
+        } catch {
+            DDLogError("\(#function): \(error.localizedDescription)")
+            fatalError("Could not create DatabaseConnection: \(error)")
+        }
+    }
+    private func createModelContainer() {
+        do {
+            let config = ModelConfiguration(isStoredInMemoryOnly: false)
+            self.modelContainer = try ModelContainer(for: TodoItem.self, configurations: config)
+        } catch {
+            DDLogError("\(#function): \(error.localizedDescription)")
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }
     private func getDocumentsDirectoryURL() -> URL {
         let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         return documentDirectoryUrl
@@ -95,5 +118,14 @@ class FileCache {
     }
     private func getFromJSONFile(fileName: String) throws -> Data {
         return try Data(contentsOf: getURL(for: fileName))
+    }
+    private func getSelectedStorage() {
+        let value = UserDefaults.standard.string(forKey: "persistence")
+        switch value {
+        case "SQLite":
+            type = .SQLite
+        default:
+            type = .swiftData
+        }
     }
 }

@@ -42,7 +42,7 @@
 		2D736BE52C3C33A2009E361E /* CocoaLumberjackSwiftLogBackend in Frameworks */ = {isa = PBXBuildFile; productRef = 2D736BE42C3C33A2009E361E /* CocoaLumberjackSwiftLogBackend */; };
 		2D7939FD2C25808E002542DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7939FC2C25808E002542DE /* MainViewModel.swift */; };
 		2D7DAB6C2C4EE6D80031A232 /* FileCache + SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7DAB6B2C4EE6D80031A232 /* FileCache + SwiftData.swift */; };
-		2D7DAB6F2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7DAB6E2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift */; };
+		2D7DAB6F2C4EE7CA0031A232 /* StorageLogic + Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7DAB6E2C4EE7CA0031A232 /* StorageLogic + Persistence.swift */; };
 		2D88B4DB2C1D9B0900049A3B /* ToDoListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B4DA2C1D9B0900049A3B /* ToDoListApp.swift */; };
 		2D88B4DD2C1D9B0900049A3B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D88B4DC2C1D9B0900049A3B /* MainView.swift */; };
 		2D88B4DF2C1D9B0B00049A3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D88B4DE2C1D9B0B00049A3B /* Assets.xcassets */; };
@@ -58,6 +58,9 @@
 		2D9057292C4278AD00CC2442 /* DefaultNetworkingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9057282C4278AD00CC2442 /* DefaultNetworkingService.swift */; };
 		2D90572C2C427B5300CC2442 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D90572B2C427B5300CC2442 /* KeychainService.swift */; };
 		2D90572E2C428E2200CC2442 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D90572D2C428E2200CC2442 /* Constants.swift */; };
+		2DB794122C50EF8F00CEEEBF /* FileCache + SQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB794112C50EF8F00CEEEBF /* FileCache + SQLite.swift */; };
+		2DB794152C50F26400CEEEBF /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 2DB794142C50F26400CEEEBF /* SQLite */; };
+		2DB794172C51176800CEEEBF /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DB794162C51176800CEEEBF /* Settings.bundle */; };
 		2DB7F56B2C31CC23009C65FE /* StorageLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB7F56A2C31CC23009C65FE /* StorageLogic.swift */; };
 		2DD5B7862C43EC26008D1705 /* CustomColorPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 2DD5B7852C43EC26008D1705 /* CustomColorPicker */; };
 		2DD926032C43EE2B00504C40 /* CustomColorPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 2DD926022C43EE2B00504C40 /* CustomColorPicker */; };
@@ -125,7 +128,7 @@
 		2D736BDB2C3B0FE8009E361E /* ToDoListDataTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListDataTaskTests.swift; sourceTree = "<group>"; };
 		2D7939FC2C25808E002542DE /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		2D7DAB6B2C4EE6D80031A232 /* FileCache + SwiftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileCache + SwiftData.swift"; sourceTree = "<group>"; };
-		2D7DAB6E2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageLogic + SwiftData.swift"; sourceTree = "<group>"; };
+		2D7DAB6E2C4EE7CA0031A232 /* StorageLogic + Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageLogic + Persistence.swift"; sourceTree = "<group>"; };
 		2D88B4D72C1D9B0900049A3B /* ToDoList-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ToDoList-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D88B4DA2C1D9B0900049A3B /* ToDoListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListApp.swift; sourceTree = "<group>"; };
 		2D88B4DC2C1D9B0900049A3B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -143,6 +146,8 @@
 		2D9057282C4278AD00CC2442 /* DefaultNetworkingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNetworkingService.swift; sourceTree = "<group>"; };
 		2D90572B2C427B5300CC2442 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		2D90572D2C428E2200CC2442 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2DB794112C50EF8F00CEEEBF /* FileCache + SQLite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileCache + SQLite.swift"; sourceTree = "<group>"; };
+		2DB794162C51176800CEEEBF /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		2DB7F56A2C31CC23009C65FE /* StorageLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageLogic.swift; sourceTree = "<group>"; };
 		2DD926072C47AFAC00504C40 /* NetworkingElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingElement.swift; sourceTree = "<group>"; };
 		2DD926092C47B15500504C40 /* NetworkingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingItem.swift; sourceTree = "<group>"; };
@@ -179,6 +184,7 @@
 				2D736BE12C3C33A2009E361E /* CocoaLumberjack in Frameworks */,
 				30597BB9BF4B0090C93FC4E3 /* Pods_ToDoList_ios.framework in Frameworks */,
 				2D736BE52C3C33A2009E361E /* CocoaLumberjackSwiftLogBackend in Frameworks */,
+				2DB794152C50F26400CEEEBF /* SQLite in Frameworks */,
 				2D736BE32C3C33A2009E361E /* CocoaLumberjackSwift in Frameworks */,
 				2DD926032C43EE2B00504C40 /* CustomColorPicker in Frameworks */,
 			);
@@ -304,6 +310,7 @@
 		2D2786082C1DDEA300F34999 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2DB794162C51176800CEEEBF /* Settings.bundle */,
 				2D88B4DE2C1D9B0B00049A3B /* Assets.xcassets */,
 				2D88B4E02C1D9B0B00049A3B /* Preview Content */,
 			);
@@ -351,6 +358,7 @@
 			children = (
 				2D2786052C1DC9C000F34999 /* FileCache.swift */,
 				2D7DAB6B2C4EE6D80031A232 /* FileCache + SwiftData.swift */,
+				2DB794112C50EF8F00CEEEBF /* FileCache + SQLite.swift */,
 			);
 			path = FileCache;
 			sourceTree = "<group>";
@@ -472,7 +480,7 @@
 			isa = PBXGroup;
 			children = (
 				2DB7F56A2C31CC23009C65FE /* StorageLogic.swift */,
-				2D7DAB6E2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift */,
+				2D7DAB6E2C4EE7CA0031A232 /* StorageLogic + Persistence.swift */,
 			);
 			path = StorageLogic;
 			sourceTree = "<group>";
@@ -625,6 +633,7 @@
 				2D736BE42C3C33A2009E361E /* CocoaLumberjackSwiftLogBackend */,
 				2DD5B7852C43EC26008D1705 /* CustomColorPicker */,
 				2DD926022C43EE2B00504C40 /* CustomColorPicker */,
+				2DB794142C50F26400CEEEBF /* SQLite */,
 			);
 			productName = "ToDoList-ios";
 			productReference = 2D88B4D72C1D9B0900049A3B /* ToDoList-ios.app */;
@@ -684,6 +693,7 @@
 			packageReferences = (
 				2D736BDF2C3C33A2009E361E /* XCRemoteSwiftPackageReference "CocoaLumberjack" */,
 				2DD926012C43EE2B00504C40 /* XCRemoteSwiftPackageReference "CustomColorPicker" */,
+				2DB794132C50F26300CEEEBF /* XCRemoteSwiftPackageReference "SQLite" */,
 			);
 			productRefGroup = 2D88B4D82C1D9B0900049A3B /* Products */;
 			projectDirPath = "";
@@ -709,6 +719,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D88B4E22C1D9B0B00049A3B /* Preview Assets.xcassets in Resources */,
+				2DB794172C51176800CEEEBF /* Settings.bundle in Resources */,
 				2D88B4DF2C1D9B0B00049A3B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -829,6 +840,7 @@
 				2D8E38502C26D60200C2BC93 /* SheetModifier.swift in Sources */,
 				2D54CA992C382ED6004D4719 /* KeyboardModifier.swift in Sources */,
 				2D1ED7E92C3D358F002C7ED0 /* ImportanceView.swift in Sources */,
+				2DB794122C50EF8F00CEEEBF /* FileCache + SQLite.swift in Sources */,
 				2D3028112C35990A0087F940 /* UIImage+Extension.swift in Sources */,
 				2D1ED7F62C3D5087002C7ED0 /* CategoryView.swift in Sources */,
 				2D736BDA2C3B0F9E009E361E /* URLSession+Extension.swift in Sources */,
@@ -850,7 +862,7 @@
 				2D90572C2C427B5300CC2442 /* KeychainService.swift in Sources */,
 				2D2A9F502C2B7987002B49EF /* TextFieldFrameModifier.swift in Sources */,
 				2D0D5FC92C40542B0041043F /* MockTodoItems.swift in Sources */,
-				2D7DAB6F2C4EE7CA0031A232 /* StorageLogic + SwiftData.swift in Sources */,
+				2D7DAB6F2C4EE7CA0031A232 /* StorageLogic + Persistence.swift in Sources */,
 				2D88B5052C1D9B6D00049A3B /* TodoItem.swift in Sources */,
 				2D8E384A2C26D54300C2BC93 /* ModalState.swift in Sources */,
 				2DE2D8ED2C4927C1003C673C /* AlertData.swift in Sources */,
@@ -1216,6 +1228,14 @@
 				minimumVersion = 3.8.5;
 			};
 		};
+		2DB794132C50F26300CEEEBF /* XCRemoteSwiftPackageReference "SQLite" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift?ysclid=lyzkz3qe7j327850951";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.3;
+			};
+		};
 		2DD926012C43EE2B00504C40 /* XCRemoteSwiftPackageReference "CustomColorPicker" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/marsppk/CustomColorPicker";
@@ -1241,6 +1261,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2D736BDF2C3C33A2009E361E /* XCRemoteSwiftPackageReference "CocoaLumberjack" */;
 			productName = CocoaLumberjackSwiftLogBackend;
+		};
+		2DB794142C50F26400CEEEBF /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2DB794132C50F26300CEEEBF /* XCRemoteSwiftPackageReference "SQLite" */;
+			productName = SQLite;
 		};
 		2DD5B7852C43EC26008D1705 /* CustomColorPicker */ = {
 			isa = XCSwiftPackageProductDependency;

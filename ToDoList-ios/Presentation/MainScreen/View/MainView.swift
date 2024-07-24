@@ -175,9 +175,6 @@ struct MainView: View {
         .onDisappear {
             DDLogInfo("\(#function): MainView disappeared")
         }
-        .onReceive(viewModel.$sortedItems) { _ in
-            viewModel.count = viewModel.storage.getCount()
-        }
         .modifier(SheetModifier(modalState: modalState, storage: viewModel.storage, apiManager: viewModel.apiManager))
         .modifier(AlertModifier(apiManager: viewModel.apiManager))
     }

@@ -86,7 +86,7 @@ final class DetailsViewModel: ObservableObject {
         isDisabledSave = false
     }
     func addToDoItem(item: TodoItem, storage: StorageLogic) {
-        storage.insertItemInSwiftData(item: item)
+        storage.insertItemInPersistence(item: item)
         apiManager.incrementNumberOfTasks()
         addToDoItemOnServer(item: item, storage: storage)
     }
@@ -116,7 +116,7 @@ final class DetailsViewModel: ObservableObject {
         }
     }
     func updateToDoItem(item: TodoItem, storage: StorageLogic) {
-        storage.updateItemInSwiftData(item: item)
+        storage.updateItemInPersistence(item: item)
         apiManager.incrementNumberOfTasks()
         updateToDoItemOnServer(item: item, storage: storage)
     }
@@ -146,7 +146,7 @@ final class DetailsViewModel: ObservableObject {
         }
     }
     func deleteToDoItem(item: TodoItem, storage: StorageLogic) {
-        storage.deleteItemInSwiftData(item: item)
+        storage.deleteItemInPersistence(item: item)
         apiManager.incrementNumberOfTasks()
         deleteToDoItemOnServer(id: item.id, storage: storage)
     }

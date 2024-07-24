@@ -20,7 +20,12 @@ protocol StorableInSwiftData {
 extension FileCache: StorableInSwiftData {
     @MainActor
     func insert(_ todoItem: TodoItem) {
-        modelContainer.mainContext.insert(todoItem)
+        do {
+            guard let modelContainer = modelContainer else { throw SwiftDataErrors.containerError }
+            modelContainer.mainContext.insert(todoItem)
+        } catch {
+            DDLogError("\(#function): \(error.localizedDescription)")
+        }
     }
     @MainActor
     func fetch() -> [TodoItem] {
@@ -29,6 +34,7 @@ extension FileCache: StorableInSwiftData {
             defer {
                 DDLogInfo("\(#function): the items have been loaded from SwiffData successfully")
             }
+            guard let modelContainer = modelContainer else { throw SwiftDataErrors.containerError }
             return try modelContainer.mainContext.fetch(fetchDescriptor)
         } catch {
             DDLogError("\(#function): \(error.localizedDescription)")
@@ -37,8 +43,13 @@ extension FileCache: StorableInSwiftData {
     }
     @MainActor
     func delete(_ todoItem: TodoItem) {
-        modelContainer.mainContext.delete(todoItem)
-        DDLogInfo("\(#function): the item has been deleted from SwiffData successfully")
+        do {
+            guard let modelContainer = modelContainer else { throw SwiftDataErrors.containerError }
+            modelContainer.mainContext.delete(todoItem)
+            DDLogInfo("\(#function): the item has been deleted from SwiffData successfully")
+        } catch {
+            DDLogError("\(#function): \(error.localizedDescription)")
+        }
     }
     @MainActor
     func update(_ todoItem: TodoItem) {
@@ -54,8 +65,12 @@ extension FileCache: StorableInSwiftData {
         var descriptor = FetchDescriptor(predicate: predicate)
         descriptor.fetchLimit = 1
         do {
+            guard let modelContainer = modelContainer else { throw SwiftDataErrors.containerError }
             let item = try modelContainer.mainContext.fetch(descriptor)
             DDLogInfo("\(#function): the item has been fetched from SwiffData successfully")
+            if item.count == 0 {
+                throw SwiftDataErrors.notFound
+            }
             return item[0]
         } catch {
             DDLogError("\(#function): \(error.localizedDescription)")
@@ -71,6 +86,7 @@ extension FileCache: StorableInSwiftData {
             defer {
                 DDLogInfo("\(#function): the sorted items have been loaded from SwiffData successfully")
             }
+            guard let modelContainer = modelContainer else { throw SwiftDataErrors.containerError }
             return try modelContainer.mainContext.fetch(fetchDescriptor)
         } catch {
             DDLogError("\(#function): \(error.localizedDescription)")
@@ -95,4 +111,9 @@ extension FileCache: StorableInSwiftData {
             return [SortDescriptor(\.importance, order: .reverse), SortDescriptor(\.createdAt)]
         }
     }
+}
+
+enum SwiftDataErrors: Error {
+    case containerError
+    case notFound
 }

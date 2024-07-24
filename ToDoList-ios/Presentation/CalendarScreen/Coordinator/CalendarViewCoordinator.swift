@@ -47,7 +47,7 @@ class CalendarViewCoordinator: NSObject {
         view.tableView.reloadData()
     }
     func updateData() {
-        storage.loadItemsFromSwiftData()
+        storage.loadItemsFromPersistence()
     }
     func countNumberOfSections() -> Int {
         var anotherCategory = 0
@@ -57,7 +57,7 @@ class CalendarViewCoordinator: NSObject {
         return storage.getItems().count == 0 ? 0 : sections.count + anotherCategory
     }
     func updateToDoItem(item: TodoItem) {
-        storage.updateItemInSwiftData(item: item)
+        storage.updateItemInPersistence(item: item)
         apiManager.incrementNumberOfTasks()
         updateToDoItemOnServer(item: item)
     }

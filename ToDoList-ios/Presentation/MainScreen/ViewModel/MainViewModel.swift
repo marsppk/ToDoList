@@ -56,7 +56,7 @@ final class MainViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     func updateSortedItems() {
-        sortedItems = storage.loadSortedItemsFromSwiftData(sortType: sortType, filterType: filterType)
+        sortedItems = storage.loadSortedItemsFromPersistence(sortType: sortType, filterType: filterType)
         count = storage.getCount()
     }
     func changeShowButtonValue() {
@@ -69,7 +69,7 @@ final class MainViewModel: ObservableObject {
     }
     // MARK: - Networking
     func loadItems() {
-        storage.loadItemsFromSwiftData()
+        storage.loadItemsFromPersistence()
         if !storage.checkIsDirty() {
             loadItemsFromServer()
         } else {
@@ -77,7 +77,7 @@ final class MainViewModel: ObservableObject {
         }
     }
     func updateItem(item: TodoItem) {
-        storage.updateItemInSwiftData(item: item)
+        storage.updateItemInPersistence(item: item)
         updateSortedItems()
         if !storage.checkIsDirty() {
             apiManager.incrementNumberOfTasks()
@@ -87,7 +87,7 @@ final class MainViewModel: ObservableObject {
         }
     }
     func deleteItem(item: TodoItem) {
-        storage.deleteItemInSwiftData(item: item)
+        storage.deleteItemInPersistence(item: item)
         updateSortedItems()
         if !storage.checkIsDirty() {
             apiManager.incrementNumberOfTasks()
@@ -114,7 +114,8 @@ final class MainViewModel: ObservableObject {
             do {
                 let items = try await apiManager.getTodoList()
                 storage.deleteAllItemsThatNotInBackend(items: items)
-                items.forEach(self.storage.updateItemAfterLoading(item:))
+                items.forEach(self.storage.updateItemInPersistenceAfterLoading(item:))
+                storage.loadItemsFromPersistence()
                 DDLogInfo("\(#function): the items have been loaded successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
@@ -129,7 +130,8 @@ final class MainViewModel: ObservableObject {
             do {
                 let items = try await apiManager.updateTodoList(todoList: Array(self.storage.getItems().values))
                 storage.deleteAllItemsThatNotInBackend(items: items)
-                items.forEach(self.storage.updateItemAfterLoading(item:))
+                items.forEach(self.storage.updateItemInPersistenceAfterLoading(item:))
+                storage.loadItemsFromPersistence()
                 storage.updateIsDirty(value: false)
                 DDLogInfo("\(#function): the items have been synchronized successfully")
             } catch {
