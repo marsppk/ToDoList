@@ -95,12 +95,13 @@ final class DetailsViewModel: ObservableObject {
             do {
                 try await apiManager.addTodoItem(item: item)
                 apiManager.decrementNumberOfTasks()
+                apiManager.isShownAlertWithNoConnection = false
                 DDLogInfo("\(#function): the item has been added successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
-                let isServerError = error?.localizedDescription == NetworkingErrors.serverError.localizedDescription
-                if retryDelay < Delay.maxDelay, isServerError {
+                let isNeededRetry = error == NetworkingErrors.serverError || error == NetworkingErrors.noConnection
+                if retryDelay < Delay.maxDelay, isNeededRetry {
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(retryDelay)) {
                         self.addToDoItemOnServer(
                             item: item,
@@ -125,12 +126,13 @@ final class DetailsViewModel: ObservableObject {
             do {
                 try await apiManager.updateTodoItem(item: item)
                 apiManager.decrementNumberOfTasks()
+                apiManager.isShownAlertWithNoConnection = false
                 DDLogInfo("\(#function): the item has been updated successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
-                let isServerError = error?.localizedDescription == NetworkingErrors.serverError.localizedDescription
-                if retryDelay < Delay.maxDelay, isServerError {
+                let isNeededRetry = error == NetworkingErrors.serverError || error == NetworkingErrors.noConnection
+                if retryDelay < Delay.maxDelay, isNeededRetry {
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(retryDelay)) {
                         self.updateToDoItemOnServer(
                             item: item,
@@ -154,13 +156,14 @@ final class DetailsViewModel: ObservableObject {
         Task {
             do {
                 try await apiManager.deleteTodoItem(id: id.uuidString)
+                apiManager.isShownAlertWithNoConnection = false
                 apiManager.decrementNumberOfTasks()
                 DDLogInfo("\(#function): the item has been deleted successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
-                let isServerError = error?.localizedDescription == NetworkingErrors.serverError.localizedDescription
-                if retryDelay < Delay.maxDelay, isServerError {
+                let isNeededRetry = error == NetworkingErrors.serverError || error == NetworkingErrors.noConnection
+                if retryDelay < Delay.maxDelay, isNeededRetry {
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(retryDelay)) {
                         self.deleteToDoItemOnServer(
                             id: id,

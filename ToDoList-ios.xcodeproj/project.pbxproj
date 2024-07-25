@@ -32,6 +32,7 @@
 		2D30280F2C356B970087F940 /* CalendarViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D30280E2C356B970087F940 /* CalendarViewCoordinator.swift */; };
 		2D3028112C35990A0087F940 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3028102C35990A0087F940 /* UIImage+Extension.swift */; };
 		2D3028132C36CFB90087F940 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3028122C36CFB90087F940 /* UIView+Extension.swift */; };
+		2D533C152C52D2D00056583D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D533C142C52D2D00056583D /* Reachability.swift */; };
 		2D54CA992C382ED6004D4719 /* KeyboardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D54CA982C382ED6004D4719 /* KeyboardModifier.swift */; };
 		2D6712982C414BA700E2C99D /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6712972C414BA700E2C99D /* LogFormatter.swift */; };
 		2D67129F2C41753200E2C99D /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D67129E2C41753200E2C99D /* UINavigationController+Extension.swift */; };
@@ -121,6 +122,7 @@
 		2D30280E2C356B970087F940 /* CalendarViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewCoordinator.swift; sourceTree = "<group>"; };
 		2D3028102C35990A0087F940 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		2D3028122C36CFB90087F940 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		2D533C142C52D2D00056583D /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		2D54CA982C382ED6004D4719 /* KeyboardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardModifier.swift; sourceTree = "<group>"; };
 		2D6712972C414BA700E2C99D /* LogFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogFormatter.swift; sourceTree = "<group>"; };
 		2D67129E2C41753200E2C99D /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extension.swift"; sourceTree = "<group>"; };
@@ -392,6 +394,14 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
+		2D533C132C52D2B50056583D /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				2D533C142C52D2D00056583D /* Reachability.swift */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
 		2D6712962C414B9A00E2C99D /* Logger */ = {
 			isa = PBXGroup;
 			children = (
@@ -538,6 +548,7 @@
 		2D9057252C42786A00CC2442 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				2D533C132C52D2B50056583D /* Reachability */,
 				2DD926062C47AF1900504C40 /* Model */,
 				2D9057262C42789100CC2442 /* NetworkingService.swift */,
 				2D9057282C4278AD00CC2442 /* DefaultNetworkingService.swift */,
@@ -857,6 +868,7 @@
 				2D2A9F552C2C0EFF002B49EF /* Date+Extension.swift in Sources */,
 				2DE2D8EB2C4926DB003C673C /* NetworkingErrors.swift in Sources */,
 				2D1ED7F02C3D496B002C7ED0 /* ColorPickerView.swift in Sources */,
+				2D533C152C52D2D00056583D /* Reachability.swift in Sources */,
 				2D2DD42C2C2B27C9007A0F5A /* Color+Extension.swift in Sources */,
 				2DE2D8EF2C494EFB003C673C /* Delay.swift in Sources */,
 				2D90572C2C427B5300CC2442 /* KeychainService.swift in Sources */,

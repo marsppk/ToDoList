@@ -10,6 +10,7 @@ import Foundation
 class DefaultNetworkingService: NetworkingService, ObservableObject, @unchecked Sendable {
     @Published var numberOfTasks = 0
     @Published var alertData: AlertData?
+    @Published var isShownAlertWithNoConnection = false
     private let baseURL = "https://hive.mrdekk.ru/todo"
     private let token: String
     private var revision = 0
@@ -129,6 +130,9 @@ class DefaultNetworkingService: NetworkingService, ObservableObject, @unchecked 
         return request
     }
     private func performRequest(_ request: URLRequest) async throws -> (Data, HTTPURLResponse) {
+        guard Reachability.isConnectedToNetwork() else { 
+            throw NetworkingErrors.noConnection
+        }
         let (ans, response) = try await URLSession.shared.dataTask(for: request)
         guard let response = response as? HTTPURLResponse else {
             throw NetworkingErrors.unexpectedResponse(response)

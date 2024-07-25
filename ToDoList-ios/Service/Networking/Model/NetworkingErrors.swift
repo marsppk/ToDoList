@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum NetworkingErrors: Error {
+enum NetworkingErrors: Error, Equatable {
     case incorrectURL(String)
     case unexpectedResponse(URLResponse)
     case badRequest
@@ -15,6 +15,7 @@ enum NetworkingErrors: Error {
     case notFound
     case serverError
     case unexpectedStatusCode(Int)
+    case noConnection
 }
 
 extension NetworkingErrors: LocalizedError {
@@ -34,6 +35,8 @@ extension NetworkingErrors: LocalizedError {
             return "Server error"
         case .unexpectedStatusCode(let code):
             return "Unexpected status code: \(code)"
+        case .noConnection:
+            return "No internet connection"
         }
     }
 }

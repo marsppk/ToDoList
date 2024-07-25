@@ -116,9 +116,14 @@ final class MainViewModel: ObservableObject {
                 storage.deleteAllItemsThatNotInBackend(items: items)
                 items.forEach(self.storage.updateItemInPersistenceAfterLoading(item:))
                 storage.loadItemsFromPersistence()
+                apiManager.isShownAlertWithNoConnection = false
                 DDLogInfo("\(#function): the items have been loaded successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
+                guard isShowAlert(error: error) else { return }
+                if let error = error as? NetworkingErrors, error == .noConnection {
+                    apiManager.isShownAlertWithNoConnection = true
+                }
                 apiManager.alertData = AlertData(message: error.localizedDescription)
             }
             apiManager.decrementNumberOfTasks()
@@ -133,9 +138,14 @@ final class MainViewModel: ObservableObject {
                 items.forEach(self.storage.updateItemInPersistenceAfterLoading(item:))
                 storage.loadItemsFromPersistence()
                 storage.updateIsDirty(value: false)
+                apiManager.isShownAlertWithNoConnection = false
                 DDLogInfo("\(#function): the items have been synchronized successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
+                guard isShowAlert(error: error) else { return }
+                if let error = error as? NetworkingErrors, error == .noConnection {
+                    apiManager.isShownAlertWithNoConnection = true
+                }
                 apiManager.alertData = AlertData(message: error.localizedDescription)
             }
             apiManager.decrementNumberOfTasks()
@@ -145,13 +155,14 @@ final class MainViewModel: ObservableObject {
         Task {
             do {
                 try await apiManager.updateTodoItem(item: item)
-                DDLogInfo("\(#function): the item has been updated successfully")
                 apiManager.decrementNumberOfTasks()
+                apiManager.isShownAlertWithNoConnection = false
+                DDLogInfo("\(#function): the item has been updated successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
-                let isServerError = error?.localizedDescription == NetworkingErrors.serverError.localizedDescription
-                if retryDelay < Delay.maxDelay, isServerError {
+                let isNeededRetry = error == NetworkingErrors.serverError || error == NetworkingErrors.noConnection
+                if retryDelay < Delay.maxDelay, isNeededRetry {
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(retryDelay)) {
                         self.updateItemOnServer(item: item, retryDelay: Delay.countNextDelay(from: retryDelay))
                     }
@@ -168,12 +179,13 @@ final class MainViewModel: ObservableObject {
             do {
                 try await apiManager.deleteTodoItem(id: id.uuidString)
                 apiManager.decrementNumberOfTasks()
+                apiManager.isShownAlertWithNoConnection = false
                 DDLogInfo("\(#function): the item has been deleted successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
-                let isServerError = error?.localizedDescription == NetworkingErrors.serverError.localizedDescription
-                if retryDelay < Delay.maxDelay, isServerError {
+                let isNeededRetry = error == NetworkingErrors.serverError || error == NetworkingErrors.noConnection
+                if retryDelay < Delay.maxDelay, isNeededRetry {
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(Int(retryDelay))) {
                         self.deleteItemOnServer(id: id, retryDelay: Delay.countNextDelay(from: retryDelay))
                     }
@@ -184,5 +196,11 @@ final class MainViewModel: ObservableObject {
                 }
             }
         }
+    }
+    private func isShowAlert(error: Error) -> Bool {
+        guard let error = error as? NetworkingErrors, error == .noConnection else {
+            return true
+        }
+        return !apiManager.isShownAlertWithNoConnection
     }
 }
