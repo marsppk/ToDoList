@@ -67,12 +67,13 @@ class CalendarViewCoordinator: NSObject {
                 try await apiManager.updateTodoItem(item: item)
                 storage.isUpdated = true
                 apiManager.decrementNumberOfTasks()
+                apiManager.isShownAlertWithNoConnection = false
                 DDLogInfo("\(#function): the item has been updated successfully")
             } catch {
                 DDLogError("\(#function): \(error.localizedDescription)")
                 let error = error as? NetworkingErrors
-                let isServerError = error?.localizedDescription == NetworkingErrors.serverError.localizedDescription
-                if retryDelay < Delay.maxDelay, isServerError {
+                let isNeededRetry = error == NetworkingErrors.serverError || error == NetworkingErrors.noConnection
+                if retryDelay < Delay.maxDelay, isNeededRetry {
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(retryDelay)) {
                         self.updateToDoItemOnServer(
                             item: item,
